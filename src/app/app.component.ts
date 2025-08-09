@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PdfService } from './services/pdf.service';
+import { PdfService, PDFConfig, PDF_FORMATS, DEFAULT_MARGINS, PDFPageFormat, PDFMargins } from './services/pdf.service';
 import { FileService } from './services/file.service';
 import { ThemeService } from './services/theme.service';
 import { PrintPreviewService } from './services/print-preview.service';
@@ -59,6 +59,15 @@ function hello() {
   uploadedFileName = '';
   isUploading = false;
   isDarkMode = false;
+  
+  // PDF Configuration
+  pdfFormats = PDF_FORMATS;
+  selectedFormat: PDFPageFormat = PDF_FORMATS['A4'];
+  orientation: 'portrait' | 'landscape' = 'portrait';
+  margins: PDFMargins = { ...DEFAULT_MARGINS };
+  customWidth = 210;
+  customHeight = 297;
+  showAdvancedOptions = false;
 
   constructor(
     private pdfService: PdfService, 
@@ -86,7 +95,15 @@ function hello() {
 
     this.isGenerating = true;
     try {
-      await this.pdfService.generatePDFFromMarkdown(this.markdownContent, this.filename);
+      const config: PDFConfig = {
+        format: this.selectedFormat.name === 'Custom' 
+          ? { name: 'Custom', width: this.customWidth, height: this.customHeight }
+          : this.selectedFormat,
+        orientation: this.orientation,
+        margins: { ...this.margins }
+      };
+      
+      await this.pdfService.generatePDFFromMarkdown(this.markdownContent, this.filename, config);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Error generating PDF. Please try again.');
@@ -234,5 +251,36 @@ for i in range(10):
 
     const title = this.filename.replace('.pdf', '') || 'Markdown Document';
     this.printPreviewService.openPrintPreview(this.htmlPreview, title);
+  }
+
+  // PDF Configuration Methods
+  onFormatChange(): void {
+    if (this.selectedFormat.name === 'Custom') {
+      this.customWidth = this.selectedFormat.width;
+      this.customHeight = this.selectedFormat.height;
+    }
+  }
+
+  resetMargins(): void {
+    this.margins = { ...DEFAULT_MARGINS };
+  }
+
+  toggleAdvancedOptions(): void {
+    this.showAdvancedOptions = !this.showAdvancedOptions;
+  }
+
+  getFormatKeys(): string[] {
+    return Object.keys(this.pdfFormats);
+  }
+
+  getPageDimensions(): string {
+    const format = this.selectedFormat.name === 'Custom' 
+      ? { width: this.customWidth, height: this.customHeight }
+      : this.selectedFormat;
+    
+    const width = this.orientation === 'portrait' ? format.width : format.height;
+    const height = this.orientation === 'portrait' ? format.height : format.width;
+    
+    return `${width} × ${height} mm`;
   }
 }

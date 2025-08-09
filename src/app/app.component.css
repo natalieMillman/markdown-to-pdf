@@ -278,3 +278,164 @@
     font-size: 0.9rem;
   }
 }
+
+/* PDF Configuration Styles */
+.pdf-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pdf-config-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.btn-toggle {
+  background: #e9ecef;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-toggle:hover {
+  background: #dee2e6;
+  transform: translateY(-1px);
+}
+
+.pdf-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.page-size-display {
+  background: #f8f9fa;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-weight: 600;
+  color: #495057;
+  text-align: center;
+}
+
+.advanced-config {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.config-divider {
+  border: none;
+  border-top: 2px solid #e9ecef;
+  margin: 20px 0;
+}
+
+.custom-size-controls {
+  margin-bottom: 25px;
+}
+
+.custom-size-controls h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.size-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.margins-controls h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.margins-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.btn-reset {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.margins-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+/* Dark mode styles for PDF config */
+body[data-theme="dark"] .pdf-config-header h3 {
+  color: #ecf0f1;
+}
+
+body[data-theme="dark"] .page-size-display {
+  background: #2c3e50;
+  border-color: #576574;
+  color: #bdc3c7;
+}
+
+body[data-theme="dark"] .custom-size-controls h4,
+body[data-theme="dark"] .margins-controls h4 {
+  color: #ecf0f1;
+}
+
+body[data-theme="dark"] .config-divider {
+  border-top-color: #576574;
+}
+
+/* Responsive PDF config */
+@media (max-width: 768px) {
+  .pdf-config-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .margins-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .size-inputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .pdf-config-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+}

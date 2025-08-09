@@ -64,15 +64,140 @@
 
   <!-- PDF Generation Section -->
   <div class="card">
-    <div class="form-group">
-      <label class="form-label" for="filename">PDF Filename:</label>
-      <input 
-        id="filename" 
-        type="text" 
-        class="form-control" 
-        [(ngModel)]="filename" 
-        placeholder="Enter filename (e.g., my-document.pdf)"
-        style="max-width: 300px;">
+    <div class="pdf-config-header">
+      <h3>PDF Configuration</h3>
+      <button 
+        class="btn btn-toggle" 
+        (click)="toggleAdvancedOptions()"
+        type="button">
+        {{ showAdvancedOptions ? '🔼 Hide Advanced' : '🔽 Show Advanced' }}
+      </button>
+    </div>
+
+    <!-- Basic Configuration -->
+    <div class="pdf-config-grid">
+      <div class="form-group">
+        <label class="form-label" for="filename">PDF Filename:</label>
+        <input 
+          id="filename" 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="filename" 
+          placeholder="Enter filename (e.g., my-document.pdf)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="format">Page Format:</label>
+        <select 
+          id="format" 
+          class="form-control" 
+          [(ngModel)]="selectedFormat" 
+          (change)="onFormatChange()">
+          <option *ngFor="let key of getFormatKeys()" [ngValue]="pdfFormats[key]">
+            {{ pdfFormats[key].name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="orientation">Orientation:</label>
+        <select id="orientation" class="form-control" [(ngModel)]="orientation">
+          <option value="portrait">📄 Portrait</option>
+          <option value="landscape">📄 Landscape</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Page Size:</label>
+        <div class="page-size-display">{{ getPageDimensions() }}</div>
+      </div>
+    </div>
+
+    <!-- Advanced Configuration -->
+    <div *ngIf="showAdvancedOptions" class="advanced-config">
+      <hr class="config-divider">
+      
+      <!-- Custom Size Controls -->
+      <div *ngIf="selectedFormat.name === 'Custom'" class="custom-size-controls">
+        <h4>Custom Page Size</h4>
+        <div class="size-inputs">
+          <div class="form-group">
+            <label class="form-label" for="customWidth">Width (mm):</label>
+            <input 
+              id="customWidth" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="customWidth" 
+              min="50" 
+              max="500">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="customHeight">Height (mm):</label>
+            <input 
+              id="customHeight" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="customHeight" 
+              min="50" 
+              max="500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Margins Controls -->
+      <div class="margins-controls">
+        <div class="margins-header">
+          <h4>Page Margins (mm)</h4>
+          <button 
+            class="btn btn-reset" 
+            (click)="resetMargins()" 
+            type="button">
+            🔄 Reset
+          </button>
+        </div>
+        <div class="margins-grid">
+          <div class="form-group">
+            <label class="form-label" for="marginTop">Top:</label>
+            <input 
+              id="marginTop" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="margins.top" 
+              min="0" 
+              max="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="marginRight">Right:</label>
+            <input 
+              id="marginRight" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="margins.right" 
+              min="0" 
+              max="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="marginBottom">Bottom:</label>
+            <input 
+              id="marginBottom" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="margins.bottom" 
+              min="0" 
+              max="50">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="marginLeft">Left:</label>
+            <input 
+              id="marginLeft" 
+              type="number" 
+              class="form-control" 
+              [(ngModel)]="margins.left" 
+              min="0" 
+              max="50">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="button-group">

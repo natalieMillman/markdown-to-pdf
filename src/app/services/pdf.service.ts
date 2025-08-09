@@ -3,6 +3,39 @@ import { marked } from 'marked';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+export interface PDFPageFormat {
+  name: string;
+  width: number;  // in mm
+  height: number; // in mm
+}
+
+export interface PDFMargins {
+  top: number;    // in mm
+  right: number;  // in mm
+  bottom: number; // in mm
+  left: number;   // in mm
+}
+
+export interface PDFConfig {
+  format: PDFPageFormat;
+  orientation: 'portrait' | 'landscape';
+  margins: PDFMargins;
+}
+
+export const PDF_FORMATS: { [key: string]: PDFPageFormat } = {
+  A4: { name: 'A4', width: 210, height: 297 },
+  LETTER: { name: 'Letter', width: 216, height: 279 },
+  LEGAL: { name: 'Legal', width: 216, height: 356 },
+  CUSTOM: { name: 'Custom', width: 210, height: 297 }
+};
+
+export const DEFAULT_MARGINS: PDFMargins = {
+  top: 20,
+  right: 20,
+  bottom: 20,
+  left: 20
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,15 +57,34 @@ export class PdfService {
   }
 
   /**
-   * Generate PDF from HTML content
+   * Generate PDF from HTML content with configuration
    */
-  async generatePDF(htmlContent: string, filename: string = 'document.pdf'): Promise<void> {
+  async generatePDF(htmlContent: string, filename: string = 'document.pdf', config?: PDFConfig): Promise<void> {
     try {
+      // Use default config if not provided
+      const pdfConfig = config || {
+        format: PDF_FORMATS['A4'],
+        orientation: 'portrait',
+        margins: DEFAULT_MARGINS
+      };
+
+      // Calculate dimensions based on orientation
+      const pageWidth = pdfConfig.orientation === 'portrait' 
+        ? pdfConfig.format.width 
+        : pdfConfig.format.height;
+      const pageHeight = pdfConfig.orientation === 'portrait' 
+        ? pdfConfig.format.height 
+        : pdfConfig.format.width;
+
+      // Calculate content area
+      const contentWidth = pageWidth - pdfConfig.margins.left - pdfConfig.margins.right;
+      const contentHeight = pageHeight - pdfConfig.margins.top - pdfConfig.margins.bottom;
+
       // Create a temporary container for the HTML content
       const tempContainer = document.createElement('div');
       tempContainer.innerHTML = htmlContent;
-      tempContainer.style.width = '210mm'; // A4 width
-      tempContainer.style.padding = '20mm';
+      tempContainer.style.width = `${contentWidth}mm`;
+      tempContainer.style.padding = `${pdfConfig.margins.top}mm ${pdfConfig.margins.right}mm ${pdfConfig.margins.bottom}mm ${pdfConfig.margins.left}mm`;
       tempContainer.style.backgroundColor = 'white';
       tempContainer.style.fontFamily = 'Arial, sans-serif';
       tempContainer.style.fontSize = '12px';
@@ -41,6 +93,7 @@ export class PdfService {
       tempContainer.style.position = 'absolute';
       tempContainer.style.left = '-9999px';
       tempContainer.style.top = '0';
+      tempContainer.style.boxSizing = 'border-box';
 
       // Add CSS styles for PDF formatting
       const style = document.createElement('style');
@@ -115,12 +168,15 @@ export class PdfService {
       // Remove temporary container
       document.body.removeChild(tempContainer);
 
-      // Create PDF
+      // Create PDF with custom configuration
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdf = new jsPDF({
+        orientation: pdfConfig.orientation,
+        unit: 'mm',
+        format: [pageWidth, pageHeight]
+      });
       
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 295; // A4 height in mm
+      const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
@@ -146,10 +202,10 @@ export class PdfService {
   }
 
   /**
-   * Generate PDF directly from markdown
+   * Generate PDF directly from markdown with configuration
    */
-  async generatePDFFromMarkdown(markdown: string, filename: string = 'document.pdf'): Promise<void> {
+  async generatePDFFromMarkdown(markdown: string, filename: string = 'document.pdf', config?: PDFConfig): Promise<void> {
     const html = await this.markdownToHtml(markdown);
-    await this.generatePDF(html, filename);
+    await this.generatePDF(html, filename, config);
   }
 }

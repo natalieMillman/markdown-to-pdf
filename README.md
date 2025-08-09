@@ -5,7 +5,10 @@ A simple and elegant Angular 20 web application that converts markdown documents
 ## Features
 
 - 📝 **Real-time Preview**: See your markdown rendered as you type
-- 📄 **PDF Generation**: Convert markdown to beautifully formatted PDF documents
+- 📄 **Advanced PDF Generation**: Convert markdown to beautifully formatted PDF documents
+- 📐 **Multiple PDF Formats**: Support for A4, Letter, Legal, and custom page sizes
+- 🔄 **Page Orientation**: Portrait and landscape orientation options
+- 📏 **Margin Controls**: Adjustable page margins for perfect formatting
 - 📁 **File Upload**: Upload markdown files via drag-and-drop or file picker
 - 🖨️ **Print Preview**: Preview documents in print-optimized format before generating PDF
 - 🌙 **Dark Mode**: Toggle between light and dark themes with system preference detection
@@ -63,13 +66,17 @@ The build artifacts will be stored in the `dist/` directory.
 
 1. **Toggle Theme**: Use the moon/sun button in the header to switch between light and dark modes
 2. **Upload File** (Optional): Drag and drop a markdown file or click to browse and select
-3. **Enter Content**: Type or paste your markdown content in the left panel
-4. **Live Preview**: Watch the real-time preview update in the right panel
-5. **Print Preview**: Click "Print Preview" to see how your document will look when printed
-6. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
-7. **Generate PDF**: Click the "Generate PDF" button to download your document
-8. **Load Sample**: Use the "Load Sample" button to see example markdown content
-9. **Clear Content**: Use the "Clear" button to start fresh
+3. **Configure PDF Settings**: 
+   - Choose page format (A4, Letter, Legal, or Custom)
+   - Select orientation (Portrait or Landscape)
+   - Click "Show Advanced" to adjust margins and custom page sizes
+4. **Enter Content**: Type or paste your markdown content in the left panel
+5. **Live Preview**: Watch the real-time preview update in the right panel
+6. **Print Preview**: Click "Print Preview" to see how your document will look when printed
+7. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
+8. **Generate PDF**: Click the "Generate PDF" button to download your document with custom formatting
+9. **Load Sample**: Use the "Load Sample" button to see example markdown content
+10. **Clear Content**: Use the "Clear" button to start fresh
 
 ## Supported Markdown Features
 
