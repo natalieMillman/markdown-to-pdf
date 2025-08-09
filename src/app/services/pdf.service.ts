@@ -19,8 +19,8 @@ export class PdfService {
   /**
    * Convert markdown text to HTML
    */
-  markdownToHtml(markdown: string): string {
-    return marked(markdown);
+  async markdownToHtml(markdown: string): Promise<string> {
+    return await marked(markdown);
   }
 
   /**
@@ -149,7 +149,7 @@ export class PdfService {
    * Generate PDF directly from markdown
    */
   async generatePDFFromMarkdown(markdown: string, filename: string = 'document.pdf'): Promise<void> {
-    const html = this.markdownToHtml(markdown);
+    const html = await this.markdownToHtml(markdown);
     await this.generatePDF(html, filename);
   }
 }

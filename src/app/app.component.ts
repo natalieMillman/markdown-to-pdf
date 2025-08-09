@@ -57,8 +57,8 @@ function hello() {
     this.updatePreview();
   }
 
-  updatePreview(): void {
-    this.htmlPreview = this.pdfService.markdownToHtml(this.markdownContent);
+  async updatePreview(): Promise<void> {
+    this.htmlPreview = await this.pdfService.markdownToHtml(this.markdownContent);
   }
 
   async generatePDF(): Promise<void> {
@@ -78,14 +78,14 @@ function hello() {
     }
   }
 
-  clearContent(): void {
+  async clearContent(): Promise<void> {
     if (confirm('Are you sure you want to clear all content?')) {
       this.markdownContent = '';
-      this.updatePreview();
+      await this.updatePreview();
     }
   }
 
-  loadSample(): void {
+  async loadSample(): Promise<void> {
     this.markdownContent = `# Sample Document
 
 ## Introduction
@@ -140,6 +140,6 @@ for i in range(10):
 **Thank you for using our Markdown to PDF converter!** 
 
 *Generated on ${new Date().toLocaleDateString()}*`;
-    this.updatePreview();
+    await this.updatePreview();
   }
 }
