@@ -6,6 +6,7 @@ A simple and elegant Angular 20 web application that converts markdown documents
 
 - 📝 **Real-time Preview**: See your markdown rendered as you type
 - 📄 **PDF Generation**: Convert markdown to beautifully formatted PDF documents
+- 📁 **File Upload**: Upload markdown files via drag-and-drop or file picker
 - 🎨 **Modern UI**: Clean, responsive design with gradient backgrounds
 - 📱 **Mobile Friendly**: Works on desktop, tablet, and mobile devices
 - 🚀 **Fast & Lightweight**: Built with Angular 20 standalone components
@@ -58,12 +59,13 @@ The build artifacts will be stored in the `dist/` directory.
 
 ## How to Use
 
-1. **Enter Content**: Type or paste your markdown content in the left panel
-2. **Live Preview**: Watch the real-time preview update in the right panel
-3. **Set Filename**: Enter your desired PDF filename (optional)
-4. **Generate PDF**: Click the "Generate PDF" button to download your document
-5. **Load Sample**: Use the "Load Sample" button to see example markdown content
-6. **Clear Content**: Use the "Clear" button to start fresh
+1. **Upload File** (Optional): Drag and drop a markdown file or click to browse and select
+2. **Enter Content**: Type or paste your markdown content in the left panel
+3. **Live Preview**: Watch the real-time preview update in the right panel
+4. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
+5. **Generate PDF**: Click the "Generate PDF" button to download your document
+6. **Load Sample**: Use the "Load Sample" button to see example markdown content
+7. **Clear Content**: Use the "Clear" button to start fresh
 
 ## Supported Markdown Features
 
@@ -83,7 +85,8 @@ The build artifacts will be stored in the `dist/` directory.
 src/
 ├── app/
 │   ├── services/
-│   │   └── pdf.service.ts          # PDF generation service
+│   │   ├── pdf.service.ts          # PDF generation service
+│   │   └── file.service.ts         # File upload and reading service
 │   ├── app.component.ts            # Main app component
 │   ├── app.component.html          # App template
 │   └── app.component.css           # App styles

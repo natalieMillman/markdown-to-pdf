@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PdfService } from './services/pdf.service';
+import { FileService } from './services/file.service';
 
 @Component({
   selector: 'app-root',
@@ -52,8 +53,11 @@ function hello() {
   htmlPreview = '';
   isGenerating = false;
   filename = 'document.pdf';
+  isDragOver = false;
+  uploadedFileName = '';
+  isUploading = false;
 
-  constructor(private pdfService: PdfService) {
+  constructor(private pdfService: PdfService, private fileService: FileService) {
     this.updatePreview();
   }
 
@@ -141,5 +145,65 @@ for i in range(10):
 
 *Generated on ${new Date().toLocaleDateString()}*`;
     await this.updatePreview();
+  }
+
+  // File Upload Methods
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.handleFileUpload(file);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleFileUpload(files[0]);
+    }
+  }
+
+  async handleFileUpload(file: File): Promise<void> {
+    this.isUploading = true;
+    this.uploadedFileName = '';
+
+    try {
+      const content = await this.fileService.readFileAsText(file);
+      this.markdownContent = content;
+      this.uploadedFileName = file.name;
+      
+      // Update filename for PDF generation (remove extension and add .pdf)
+      const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
+      this.filename = `${nameWithoutExt}.pdf`;
+      
+      await this.updatePreview();
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert(error instanceof Error ? error.message : 'Error uploading file. Please try again.');
+    } finally {
+      this.isUploading = false;
+    }
+  }
+
+  clearUploadedFile(): void {
+    this.uploadedFileName = '';
+    this.markdownContent = '';
+    this.filename = 'document.pdf';
+    this.updatePreview();
   }
 }
