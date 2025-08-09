@@ -6,12 +6,15 @@
         <p>Convert your markdown documents to beautiful PDFs instantly</p>
       </div>
       <div class="header-controls">
-        <button 
-          class="btn btn-theme-toggle" 
-          (click)="toggleTheme()"
-          [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
-          {{ isDarkMode ? '☀️' : '🌙' }}
-        </button>
+        <div class="theme-toggle-container">
+          <span class="theme-label">{{ isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
+          <button 
+            class="btn btn-theme-toggle" 
+            (click)="toggleTheme()"
+            [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+            {{ isDarkMode ? '☀️' : '🌙' }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
