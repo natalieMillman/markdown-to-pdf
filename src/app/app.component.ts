@@ -369,8 +369,23 @@ cx + dy
   }
 
   // Display Settings Methods
-  onFontFamilyChange(fontFamily: FontFamily): void {
-    this.displaySettingsService.setFontFamily(fontFamily);
+  onFontFamilyChange(fontValue: string): void {
+    const fontFamily = this.fontFamilies.find(f => f.value === fontValue);
+    if (fontFamily) {
+      this.displaySettingsService.setFontFamily(fontFamily);
+    }
+  }
+
+  getSansSerifFonts(): FontFamily[] {
+    return this.displaySettingsService.getFontsByCategory('sans-serif');
+  }
+
+  getSerifFonts(): FontFamily[] {
+    return this.displaySettingsService.getFontsByCategory('serif');
+  }
+
+  getMonospaceFonts(): FontFamily[] {
+    return this.displaySettingsService.getFontsByCategory('monospace');
   }
 
   onFontSizeChange(fontSize: number): void {

@@ -266,21 +266,21 @@
           id="fontFamily" 
           class="form-control" 
           [value]="displaySettings.fontFamily.value"
-          (change)="onFontFamilyChange(fontFamilies.find(f => f.value === $any($event.target).value) || fontFamilies[0])">
+          (change)="onFontFamilyChange($any($event.target).value)">
           <optgroup label="Sans-serif">
-            <option *ngFor="let font of displaySettingsService.getFontsByCategory('sans-serif')" 
+            <option *ngFor="let font of getSansSerifFonts()" 
                     [value]="font.value">
               {{ font.name }}
             </option>
           </optgroup>
           <optgroup label="Serif">
-            <option *ngFor="let font of displaySettingsService.getFontsByCategory('serif')" 
+            <option *ngFor="let font of getSerifFonts()" 
                     [value]="font.value">
               {{ font.name }}
             </option>
           </optgroup>
           <optgroup label="Monospace">
-            <option *ngFor="let font of displaySettingsService.getFontsByCategory('monospace')" 
+            <option *ngFor="let font of getMonospaceFonts()" 
                     [value]="font.value">
               {{ font.name }}
             </option>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
-import JSZip from 'jszip';
+import * as JSZip from 'jszip';
 
 export type ExportFormat = 'html' | 'docx' | 'epub';
 
