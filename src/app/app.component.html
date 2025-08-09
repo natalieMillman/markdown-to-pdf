@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="header">
+    <h1>📄 Markdown to PDF</h1>
+    <p>Convert your markdown documents to beautiful PDFs instantly</p>
+  </div>
+
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label" for="filename">PDF Filename:</label>
+      <input 
+        id="filename" 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="filename" 
+        placeholder="Enter filename (e.g., my-document.pdf)"
+        style="max-width: 300px;">
+    </div>
+
+    <div class="button-group">
+      <button 
+        class="btn btn-primary" 
+        (click)="generatePDF()" 
+        [disabled]="isGenerating">
+        {{ isGenerating ? '🔄 Generating...' : '📥 Generate PDF' }}
+      </button>
+      <button class="btn btn-secondary" (click)="loadSample()">
+        📋 Load Sample
+      </button>
+      <button class="btn btn-secondary" (click)="clearContent()">
+        🗑️ Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="form-group">
+        <label class="form-label" for="markdown">Markdown Content:</label>
+        <textarea 
+          id="markdown"
+          class="form-control" 
+          [(ngModel)]="markdownContent" 
+          (input)="updatePreview()"
+          placeholder="Type your markdown here...
+          
+Example:
+# My Document
+This is **bold** and *italic* text.
+
+- List item 1
+- List item 2
+
+```javascript
+console.log('Hello World!');
+```"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label class="form-label">Live Preview:</label>
+        <div class="preview-container" [innerHTML]="htmlPreview"></div>
+      </div>
+    </div>
+  </div>
+</div>
