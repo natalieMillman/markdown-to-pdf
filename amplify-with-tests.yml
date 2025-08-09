@@ -1,0 +1,30 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        # Install Chrome for headless testing (Ubuntu/Debian based)
+        - apt-get update
+        - apt-get install -y wget gnupg
+        - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+        - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+        - apt-get update
+        - apt-get install -y google-chrome-stable
+        # Install additional dependencies for Chrome
+        - apt-get install -y xvfb
+    build:
+      commands:
+        # Set Chrome binary and run tests
+        - export CHROME_BIN=/usr/bin/google-chrome-stable
+        - export DISPLAY=:99.0
+        - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        - npm run test:ci
+        - npm run build
+  artifacts:
+    baseDirectory: dist/markdown-to-pdf
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
