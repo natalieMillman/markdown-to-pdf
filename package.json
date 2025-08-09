@@ -25,7 +25,9 @@
     "jspdf": "^2.5.1",
     "html2canvas": "^1.4.1",
     "prismjs": "^1.29.0",
-    "katex": "^0.16.9"
+    "katex": "^0.16.9",
+    "docx": "^8.5.0",
+    "jszip": "^3.10.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",

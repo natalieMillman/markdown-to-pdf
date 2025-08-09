@@ -4,6 +4,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 // Note: We'll handle syntax highlighting in post-processing instead
 import { SyntaxMathService } from './syntax-math.service';
+import { DisplaySettingsService } from './display-settings.service';
 
 export interface PDFPageFormat {
   name: string;
@@ -45,7 +46,10 @@ declare var Prism: any;
 })
 export class PdfService {
 
-  constructor(private syntaxMathService: SyntaxMathService) {
+  constructor(
+    private syntaxMathService: SyntaxMathService,
+    private displaySettingsService: DisplaySettingsService
+  ) {
     this.configureMarked();
   }
 

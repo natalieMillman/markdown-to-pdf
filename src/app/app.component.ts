@@ -6,6 +6,8 @@ import { FileService } from './services/file.service';
 import { ThemeService } from './services/theme.service';
 import { PrintPreviewService } from './services/print-preview.service';
 import { SyntaxMathService } from './services/syntax-math.service';
+import { ExportService, ExportFormat } from './services/export.service';
+import { DisplaySettingsService, FontFamily, DisplaySettings } from './services/display-settings.service';
 
 @Component({
   selector: 'app-root',
@@ -81,19 +83,41 @@ $$A = \\pi r^2$$
   customWidth = 210;
   customHeight = 297;
   showAdvancedOptions = false;
+  
+  // Display Settings
+  displaySettings: DisplaySettings;
+  fontFamilies: FontFamily[] = [];
+  selectedExportFormat: ExportFormat = 'html';
+  exportFormats: { value: ExportFormat; label: string; icon: string }[] = [
+    { value: 'html', label: 'HTML', icon: '🌐' },
+    { value: 'docx', label: 'Word Document', icon: '📄' },
+    { value: 'epub', label: 'E-Book', icon: '📚' }
+  ];
+  isExporting = false;
 
   constructor(
     private pdfService: PdfService, 
     private fileService: FileService,
     private themeService: ThemeService,
     private printPreviewService: PrintPreviewService,
-    private syntaxMathService: SyntaxMathService
+    private syntaxMathService: SyntaxMathService,
+    private exportService: ExportService,
+    private displaySettingsService: DisplaySettingsService
   ) {
     this.updatePreview();
     
     // Subscribe to theme changes
     this.themeService.theme$.subscribe(theme => {
       this.isDarkMode = theme === 'dark';
+    });
+
+    // Initialize display settings
+    this.fontFamilies = this.displaySettingsService.fontFamilies;
+    this.displaySettings = this.displaySettingsService.getCurrentSettings();
+    
+    // Subscribe to display settings changes
+    this.displaySettingsService.settings$.subscribe(settings => {
+      this.displaySettings = settings;
     });
   }
 
@@ -342,5 +366,76 @@ cx + dy
     const height = this.orientation === 'portrait' ? format.height : format.width;
     
     return `${width} × ${height} mm`;
+  }
+
+  // Display Settings Methods
+  onFontFamilyChange(fontFamily: FontFamily): void {
+    this.displaySettingsService.setFontFamily(fontFamily);
+  }
+
+  onFontSizeChange(fontSize: number): void {
+    if (fontSize >= 10 && fontSize <= 24) {
+      this.displaySettingsService.setFontSize(fontSize);
+    }
+  }
+
+  resetDisplaySettings(): void {
+    this.displaySettingsService.resetToDefaults();
+  }
+
+  // Export Methods
+  async exportDocument(): Promise<void> {
+    if (!this.markdownContent.trim()) {
+      alert('Please enter some markdown content first.');
+      return;
+    }
+
+    this.isExporting = true;
+    try {
+      const baseFilename = this.filename.replace('.pdf', '');
+      const exportOptions = {
+        title: baseFilename || 'Markdown Document',
+        author: 'Markdown to PDF Converter',
+        fontSize: this.displaySettings.fontSize,
+        fontFamily: this.displaySettings.fontFamily.value
+      };
+
+      switch (this.selectedExportFormat) {
+        case 'html':
+          await this.exportService.exportHTML(
+            this.htmlPreview, 
+            `${baseFilename}.html`, 
+            exportOptions
+          );
+          break;
+        case 'docx':
+          await this.exportService.exportDOCX(
+            this.htmlPreview, 
+            `${baseFilename}.docx`, 
+            exportOptions
+          );
+          break;
+        case 'epub':
+          await this.exportService.exportEPUB(
+            this.htmlPreview, 
+            `${baseFilename}.epub`, 
+            exportOptions
+          );
+          break;
+      }
+    } catch (error) {
+      console.error('Error exporting document:', error);
+      alert('Error exporting document. Please try again.');
+    } finally {
+      this.isExporting = false;
+    }
+  }
+
+  getExportButtonText(): string {
+    const format = this.exportFormats.find(f => f.value === this.selectedExportFormat);
+    if (this.isExporting) {
+      return `🔄 Exporting ${format?.label}...`;
+    }
+    return `${format?.icon} Export ${format?.label}`;
   }
 }

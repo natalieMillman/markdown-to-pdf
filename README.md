@@ -6,8 +6,11 @@ A simple and elegant Angular 20 web application that converts markdown documents
 
 - 📝 **Real-time Preview**: See your markdown rendered as you type
 - 📄 **Advanced PDF Generation**: Convert markdown to beautifully formatted PDF documents
+- 📤 **Multiple Export Formats**: Export to HTML, DOCX (Word), and EPUB (e-book) formats
 - 🎨 **Syntax Highlighting**: Beautiful code highlighting for 25+ programming languages
 - 🧮 **Math Support**: LaTeX math rendering with KaTeX for academic and technical documents
+- 🔤 **Font Customization**: Choose from serif, sans-serif, and monospace font families
+- 📏 **Font Size Control**: Adjustable font size (10-24px) for optimal readability
 - 📐 **Multiple PDF Formats**: Support for A4, Letter, Legal, and custom page sizes
 - 🔄 **Page Orientation**: Portrait and landscape orientation options
 - 📏 **Margin Controls**: Adjustable page margins for perfect formatting
@@ -27,6 +30,8 @@ A simple and elegant Angular 20 web application that converts markdown documents
 - **Prism.js**: Syntax highlighting for code blocks
 - **KaTeX**: Fast math typesetting for the web
 - **jsPDF**: PDF generation library
+- **docx**: Microsoft Word document generation
+- **JSZip**: EPUB and archive file creation
 - **html2canvas**: HTML to canvas conversion for PDF rendering
 - **TypeScript**: Type-safe JavaScript
 - **CSS3**: Modern styling with gradients and animations
@@ -70,17 +75,22 @@ The build artifacts will be stored in the `dist/` directory.
 
 1. **Toggle Theme**: Use the moon/sun button in the header to switch between light and dark modes
 2. **Upload File** (Optional): Drag and drop a markdown file or click to browse and select
-3. **Configure PDF Settings**: 
+3. **Customize Display Settings**:
+   - Choose font family (serif, sans-serif, or monospace)
+   - Adjust font size (10-24px) with slider or +/- buttons
+   - Preview changes in real-time
+4. **Configure PDF Settings**: 
    - Choose page format (A4, Letter, Legal, or Custom)
    - Select orientation (Portrait or Landscape)
    - Click "Show Advanced" to adjust margins and custom page sizes
-4. **Enter Content**: Type or paste your markdown content in the left panel
-5. **Live Preview**: Watch the real-time preview update in the right panel
-6. **Print Preview**: Click "Print Preview" to see how your document will look when printed
-7. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
-8. **Generate PDF**: Click the "Generate PDF" button to download your document with custom formatting
-9. **Load Sample**: Use the "Load Sample" button to see example markdown content
-10. **Clear Content**: Use the "Clear" button to start fresh
+5. **Select Export Format**: Choose from PDF, HTML, DOCX, or EPUB
+6. **Enter Content**: Type or paste your markdown content in the left panel
+7. **Live Preview**: Watch the real-time preview update in the right panel
+8. **Print Preview**: Click "Print Preview" to see how your document will look when printed
+9. **Set Filename**: Enter your desired filename (auto-generated from uploaded files)
+10. **Export Document**: Click the export button to download in your chosen format
+11. **Load Sample**: Use the "Load Sample" button to see example markdown content
+12. **Clear Content**: Use the "Clear" button to start fresh
 
 ## Supported Markdown Features
 
@@ -113,8 +123,10 @@ src/
 ├── app/
 │   ├── services/
 │   │   ├── pdf.service.ts              # PDF generation service
+│   │   ├── export.service.ts           # Multi-format export (HTML, DOCX, EPUB)
 │   │   ├── file.service.ts             # File upload and reading service
 │   │   ├── theme.service.ts            # Dark/light theme management
+│   │   ├── display-settings.service.ts # Font and display customization
 │   │   ├── print-preview.service.ts    # Print preview functionality
 │   │   └── syntax-math.service.ts      # Syntax highlighting and math rendering
 │   ├── app.component.ts                # Main app component
