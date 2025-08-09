@@ -183,6 +183,160 @@ body[data-theme="dark"] .preview-container pre {
   background: #1a252f;
 }
 
+/* Syntax Highlighting Styles */
+.preview-container pre code {
+  background: none !important;
+  padding: 0;
+  border-radius: 0;
+}
+
+.preview-container .token.comment,
+.preview-container .token.prolog,
+.preview-container .token.doctype,
+.preview-container .token.cdata {
+  color: #708090;
+  font-style: italic;
+}
+
+.preview-container .token.punctuation {
+  color: #999;
+}
+
+.preview-container .token.property,
+.preview-container .token.tag,
+.preview-container .token.boolean,
+.preview-container .token.number,
+.preview-container .token.constant,
+.preview-container .token.symbol,
+.preview-container .token.deleted {
+  color: #905;
+}
+
+.preview-container .token.selector,
+.preview-container .token.attr-name,
+.preview-container .token.string,
+.preview-container .token.char,
+.preview-container .token.builtin,
+.preview-container .token.inserted {
+  color: #690;
+}
+
+.preview-container .token.operator,
+.preview-container .token.entity,
+.preview-container .token.url,
+.preview-container .language-css .token.string,
+.preview-container .style .token.string {
+  color: #9a6e3a;
+}
+
+.preview-container .token.atrule,
+.preview-container .token.attr-value,
+.preview-container .token.keyword {
+  color: #07a;
+}
+
+.preview-container .token.function,
+.preview-container .token.class-name {
+  color: #DD4A68;
+}
+
+.preview-container .token.regex,
+.preview-container .token.important,
+.preview-container .token.variable {
+  color: #e90;
+}
+
+/* Dark mode syntax highlighting */
+body[data-theme="dark"] .preview-container .token.comment,
+body[data-theme="dark"] .preview-container .token.prolog,
+body[data-theme="dark"] .preview-container .token.doctype,
+body[data-theme="dark"] .preview-container .token.cdata {
+  color: #8292a2;
+}
+
+body[data-theme="dark"] .preview-container .token.punctuation {
+  color: #f8f8f2;
+}
+
+body[data-theme="dark"] .preview-container .token.property,
+body[data-theme="dark"] .preview-container .token.tag,
+body[data-theme="dark"] .preview-container .token.constant,
+body[data-theme="dark"] .preview-container .token.symbol,
+body[data-theme="dark"] .preview-container .token.deleted {
+  color: #f92672;
+}
+
+body[data-theme="dark"] .preview-container .token.boolean,
+body[data-theme="dark"] .preview-container .token.number {
+  color: #ae81ff;
+}
+
+body[data-theme="dark"] .preview-container .token.selector,
+body[data-theme="dark"] .preview-container .token.attr-name,
+body[data-theme="dark"] .preview-container .token.string,
+body[data-theme="dark"] .preview-container .token.char,
+body[data-theme="dark"] .preview-container .token.builtin,
+body[data-theme="dark"] .preview-container .token.inserted {
+  color: #a6e22e;
+}
+
+body[data-theme="dark"] .preview-container .token.operator,
+body[data-theme="dark"] .preview-container .token.entity,
+body[data-theme="dark"] .preview-container .token.url,
+body[data-theme="dark"] .preview-container .language-css .token.string,
+body[data-theme="dark"] .preview-container .style .token.string {
+  color: #f8f8f2;
+}
+
+body[data-theme="dark"] .preview-container .token.atrule,
+body[data-theme="dark"] .preview-container .token.attr-value,
+body[data-theme="dark"] .preview-container .token.keyword {
+  color: #66d9ef;
+}
+
+body[data-theme="dark"] .preview-container .token.function,
+body[data-theme="dark"] .preview-container .token.class-name {
+  color: #e6db74;
+}
+
+body[data-theme="dark"] .preview-container .token.regex,
+body[data-theme="dark"] .preview-container .token.important,
+body[data-theme="dark"] .preview-container .token.variable {
+  color: #fd971f;
+}
+
+/* Math Rendering Styles */
+.preview-container .katex-display {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.preview-container .katex-inline {
+  display: inline-block;
+}
+
+.preview-container .math-error {
+  background: #ffe6e6;
+  color: #d63384;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+body[data-theme="dark"] .preview-container .math-error {
+  background: #4a1e1e;
+  color: #ff6b6b;
+}
+
+/* KaTeX adjustments for dark mode */
+body[data-theme="dark"] .preview-container .katex {
+  color: #ecf0f1;
+}
+
+body[data-theme="dark"] .preview-container .katex .base {
+  color: #ecf0f1;
+}
+
 .preview-container blockquote {
   border-left: 4px solid #667eea;
   padding-left: 16px;

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { marked } from 'marked';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+// Note: We'll handle syntax highlighting in post-processing instead
+import { SyntaxMathService } from './syntax-math.service';
 
 export interface PDFPageFormat {
   name: string;
@@ -36,24 +38,49 @@ export const DEFAULT_MARGINS: PDFMargins = {
   left: 20
 };
 
+declare var Prism: any;
+
 @Injectable({
   providedIn: 'root'
 })
 export class PdfService {
 
-  constructor() {
-    // Configure marked options for better rendering
+  constructor(private syntaxMathService: SyntaxMathService) {
+    this.configureMarked();
+  }
+
+  private configureMarked(): void {
+    // Configure marked options (syntax highlighting handled in post-processing)
     marked.setOptions({
       breaks: true,
       gfm: true
     });
   }
 
+  private escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   /**
-   * Convert markdown text to HTML
+   * Convert markdown text to HTML with syntax highlighting and math support
    */
   async markdownToHtml(markdown: string): Promise<string> {
-    return await marked(markdown);
+    // First convert markdown to HTML
+    let html = await marked(markdown);
+    
+    // Create a temporary element to process the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Apply syntax highlighting and math rendering
+    if (this.syntaxMathService.isReady()) {
+      this.syntaxMathService.processContent(tempDiv);
+      html = tempDiv.innerHTML;
+    }
+    
+    return html;
   }
 
   /**

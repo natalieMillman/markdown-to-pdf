@@ -5,6 +5,7 @@ import { PdfService, PDFConfig, PDF_FORMATS, DEFAULT_MARGINS, PDFPageFormat, PDF
 import { FileService } from './services/file.service';
 import { ThemeService } from './services/theme.service';
 import { PrintPreviewService } from './services/print-preview.service';
+import { SyntaxMathService } from './services/syntax-math.service';
 
 @Component({
   selector: 'app-root',
@@ -32,13 +33,25 @@ This is a **simple** and *elegant* tool to convert your markdown documents to PD
 2. See the live preview on the right panel
 3. Click "Generate PDF" to download your document
 
-### Code Example
+### Code Example with Syntax Highlighting
 
 \`\`\`javascript
-function hello() {
-    console.log("Hello, World!");
+function calculateCircleArea(radius) {
+    const pi = Math.PI;
+    return pi * radius * radius;
 }
+
+// Example usage
+const area = calculateCircleArea(5);
+console.log(\`Area: \${area.toFixed(2)}\`);
 \`\`\`
+
+### Mathematical Expressions
+
+**Inline math:** The area of a circle is $A = \\pi r^2$ where $r$ is the radius.
+
+**Display math:**
+$$A = \\pi r^2$$
 
 ### Quote
 
@@ -73,7 +86,8 @@ function hello() {
     private pdfService: PdfService, 
     private fileService: FileService,
     private themeService: ThemeService,
-    private printPreviewService: PrintPreviewService
+    private printPreviewService: PrintPreviewService,
+    private syntaxMathService: SyntaxMathService
   ) {
     this.updatePreview();
     
@@ -135,10 +149,12 @@ This is a sample markdown document to demonstrate the **Markdown to PDF** conver
 5. **Quotes** - Blockquotes for emphasis
 6. **Links** - [Visit GitHub](https://github.com)
 
-### Code Example
+### Code Examples with Syntax Highlighting
 
+**Python:**
 \`\`\`python
 def fibonacci(n):
+    """Calculate the nth Fibonacci number using recursion."""
     if n <= 1:
         return n
     return fibonacci(n-1) + fibonacci(n-2)
@@ -147,6 +163,50 @@ def fibonacci(n):
 for i in range(10):
     print(f"F({i}) = {fibonacci(i)}")
 \`\`\`
+
+**JavaScript:**
+\`\`\`javascript
+const calculateArea = (radius) => {
+    const pi = Math.PI;
+    return pi * radius ** 2;
+};
+
+console.log(\`Circle area: \${calculateArea(5)}\`);
+\`\`\`
+
+**TypeScript:**
+\`\`\`typescript
+interface User {
+    name: string;
+    age: number;
+    email?: string;
+}
+
+const createUser = (userData: User): User => {
+    return { ...userData };
+};
+\`\`\`
+
+### Mathematical Expressions
+
+**Inline Math:** The quadratic formula is $x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$ and Euler's identity is $e^{i\\pi} + 1 = 0$.
+
+**Display Math:**
+$$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
+
+$$\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}$$
+
+**Matrix Example:**
+$$\\begin{bmatrix}
+a & b \\\\
+c & d
+\\end{bmatrix} \\begin{bmatrix}
+x \\\\
+y
+\\end{bmatrix} = \\begin{bmatrix}
+ax + by \\\\
+cx + dy
+\\end{bmatrix}$$
 
 ### Important Quote
 

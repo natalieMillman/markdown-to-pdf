@@ -6,6 +6,8 @@ A simple and elegant Angular 20 web application that converts markdown documents
 
 - 📝 **Real-time Preview**: See your markdown rendered as you type
 - 📄 **Advanced PDF Generation**: Convert markdown to beautifully formatted PDF documents
+- 🎨 **Syntax Highlighting**: Beautiful code highlighting for 25+ programming languages
+- 🧮 **Math Support**: LaTeX math rendering with KaTeX for academic and technical documents
 - 📐 **Multiple PDF Formats**: Support for A4, Letter, Legal, and custom page sizes
 - 🔄 **Page Orientation**: Portrait and landscape orientation options
 - 📏 **Margin Controls**: Adjustable page margins for perfect formatting
@@ -22,6 +24,8 @@ A simple and elegant Angular 20 web application that converts markdown documents
 
 - **Angular 20**: Latest version with standalone components
 - **marked**: Markdown parser and compiler
+- **Prism.js**: Syntax highlighting for code blocks
+- **KaTeX**: Fast math typesetting for the web
 - **jsPDF**: PDF generation library
 - **html2canvas**: HTML to canvas conversion for PDF rendering
 - **TypeScript**: Type-safe JavaScript
@@ -82,13 +86,25 @@ The build artifacts will be stored in the `dist/` directory.
 
 - Headers (H1-H6)
 - **Bold** and *italic* text
-- `Inline code` and code blocks
+- `Inline code` and syntax-highlighted code blocks
+- Mathematical expressions (inline: `$x^2$` and display: `$$\int f(x)dx$$`)
 - Lists (ordered and unordered)
 - Links and images
 - Blockquotes
 - Tables
 - Horizontal rules
 - Task lists (checkboxes)
+
+### Supported Programming Languages
+
+JavaScript, TypeScript, Python, Java, C#, C++, C, HTML, CSS, SCSS, JSON, XML, YAML, Markdown, Bash, Shell, SQL, PHP, Ruby, Go, Rust, Swift, Kotlin, Dart, R, MATLAB, LaTeX, Dockerfile, and more.
+
+### Mathematical Expressions
+
+- **Inline Math**: Use `$...$` for inline expressions like $E = mc^2$
+- **Display Math**: Use `$$...$$` for centered equations like $$\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$$
+- **Matrices, Fractions, Integrals**: Full LaTeX math syntax support
+- **Error Handling**: Invalid expressions display gracefully with error indicators
 
 ## Project Structure
 
@@ -99,7 +115,8 @@ src/
 │   │   ├── pdf.service.ts              # PDF generation service
 │   │   ├── file.service.ts             # File upload and reading service
 │   │   ├── theme.service.ts            # Dark/light theme management
-│   │   └── print-preview.service.ts    # Print preview functionality
+│   │   ├── print-preview.service.ts    # Print preview functionality
+│   │   └── syntax-math.service.ts      # Syntax highlighting and math rendering
 │   ├── app.component.ts                # Main app component
 │   ├── app.component.html              # App template
 │   └── app.component.css               # App styles
