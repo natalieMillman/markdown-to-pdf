@@ -10,6 +10,13 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: #333;
+  transition: all 0.3s ease;
+}
+
+/* Dark Mode Styles */
+body[data-theme="dark"] {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: #ecf0f1;
 }
 
 .container {
@@ -24,6 +31,13 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 30px;
   margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+body[data-theme="dark"] .card {
+  background: #34495e;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: #ecf0f1;
 }
 
 .btn {
@@ -68,6 +82,11 @@ body {
   margin-bottom: 8px;
   font-weight: 500;
   color: #495057;
+  transition: color 0.3s ease;
+}
+
+body[data-theme="dark"] .form-label {
+  color: #bdc3c7;
 }
 
 .form-control {
@@ -76,8 +95,16 @@ body {
   border: 2px solid #e9ecef;
   border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
   font-family: 'Inter', sans-serif;
+  background: white;
+  color: #333;
+}
+
+body[data-theme="dark"] .form-control {
+  background: #2c3e50;
+  border-color: #576574;
+  color: #ecf0f1;
 }
 
 .form-control:focus {
@@ -100,6 +127,13 @@ textarea.form-control {
   background: white;
   min-height: 300px;
   overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+body[data-theme="dark"] .preview-container {
+  background: #2c3e50;
+  border-color: #576574;
+  color: #ecf0f1;
 }
 
 .preview-container h1,
@@ -132,12 +166,21 @@ textarea.form-control {
   font-size: 0.9em;
 }
 
+body[data-theme="dark"] .preview-container code {
+  background: #1a252f;
+  color: #a8d2ff;
+}
+
 .preview-container pre {
   background: #f8f9fa;
   padding: 16px;
   border-radius: 8px;
   overflow-x: auto;
   margin: 16px 0;
+}
+
+body[data-theme="dark"] .preview-container pre {
+  background: #1a252f;
 }
 
 .preview-container blockquote {

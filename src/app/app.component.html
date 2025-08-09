@@ -1,7 +1,19 @@
 <div class="container">
   <div class="header">
-    <h1>📄 Markdown to PDF</h1>
-    <p>Convert your markdown documents to beautiful PDFs instantly</p>
+    <div class="header-content">
+      <div class="title-section">
+        <h1>📄 Markdown to PDF</h1>
+        <p>Convert your markdown documents to beautiful PDFs instantly</p>
+      </div>
+      <div class="header-controls">
+        <button 
+          class="btn btn-theme-toggle" 
+          (click)="toggleTheme()"
+          [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+          {{ isDarkMode ? '☀️' : '🌙' }}
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- File Upload Section -->
@@ -69,6 +81,12 @@
         (click)="generatePDF()" 
         [disabled]="isGenerating">
         {{ isGenerating ? '🔄 Generating...' : '📥 Generate PDF' }}
+      </button>
+      <button 
+        class="btn btn-secondary" 
+        (click)="openPrintPreview()"
+        [disabled]="!markdownContent.trim()">
+        🖨️ Print Preview
       </button>
       <button class="btn btn-secondary" (click)="loadSample()">
         📋 Load Sample

@@ -7,6 +7,8 @@ A simple and elegant Angular 20 web application that converts markdown documents
 - 📝 **Real-time Preview**: See your markdown rendered as you type
 - 📄 **PDF Generation**: Convert markdown to beautifully formatted PDF documents
 - 📁 **File Upload**: Upload markdown files via drag-and-drop or file picker
+- 🖨️ **Print Preview**: Preview documents in print-optimized format before generating PDF
+- 🌙 **Dark Mode**: Toggle between light and dark themes with system preference detection
 - 🎨 **Modern UI**: Clean, responsive design with gradient backgrounds
 - 📱 **Mobile Friendly**: Works on desktop, tablet, and mobile devices
 - 🚀 **Fast & Lightweight**: Built with Angular 20 standalone components
@@ -59,13 +61,15 @@ The build artifacts will be stored in the `dist/` directory.
 
 ## How to Use
 
-1. **Upload File** (Optional): Drag and drop a markdown file or click to browse and select
-2. **Enter Content**: Type or paste your markdown content in the left panel
-3. **Live Preview**: Watch the real-time preview update in the right panel
-4. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
-5. **Generate PDF**: Click the "Generate PDF" button to download your document
-6. **Load Sample**: Use the "Load Sample" button to see example markdown content
-7. **Clear Content**: Use the "Clear" button to start fresh
+1. **Toggle Theme**: Use the moon/sun button in the header to switch between light and dark modes
+2. **Upload File** (Optional): Drag and drop a markdown file or click to browse and select
+3. **Enter Content**: Type or paste your markdown content in the left panel
+4. **Live Preview**: Watch the real-time preview update in the right panel
+5. **Print Preview**: Click "Print Preview" to see how your document will look when printed
+6. **Set Filename**: Enter your desired PDF filename (auto-generated from uploaded files)
+7. **Generate PDF**: Click the "Generate PDF" button to download your document
+8. **Load Sample**: Use the "Load Sample" button to see example markdown content
+9. **Clear Content**: Use the "Clear" button to start fresh
 
 ## Supported Markdown Features
 
@@ -85,11 +89,13 @@ The build artifacts will be stored in the `dist/` directory.
 src/
 ├── app/
 │   ├── services/
-│   │   ├── pdf.service.ts          # PDF generation service
-│   │   └── file.service.ts         # File upload and reading service
-│   ├── app.component.ts            # Main app component
-│   ├── app.component.html          # App template
-│   └── app.component.css           # App styles
+│   │   ├── pdf.service.ts              # PDF generation service
+│   │   ├── file.service.ts             # File upload and reading service
+│   │   ├── theme.service.ts            # Dark/light theme management
+│   │   └── print-preview.service.ts    # Print preview functionality
+│   ├── app.component.ts                # Main app component
+│   ├── app.component.html              # App template
+│   └── app.component.css               # App styles
 ├── assets/                         # Static assets
 ├── styles.css                      # Global styles
 ├── index.html                      # Main HTML file

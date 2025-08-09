@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PdfService } from './services/pdf.service';
 import { FileService } from './services/file.service';
+import { ThemeService } from './services/theme.service';
+import { PrintPreviewService } from './services/print-preview.service';
 
 @Component({
   selector: 'app-root',
@@ -56,9 +58,20 @@ function hello() {
   isDragOver = false;
   uploadedFileName = '';
   isUploading = false;
+  isDarkMode = false;
 
-  constructor(private pdfService: PdfService, private fileService: FileService) {
+  constructor(
+    private pdfService: PdfService, 
+    private fileService: FileService,
+    private themeService: ThemeService,
+    private printPreviewService: PrintPreviewService
+  ) {
     this.updatePreview();
+    
+    // Subscribe to theme changes
+    this.themeService.theme$.subscribe(theme => {
+      this.isDarkMode = theme === 'dark';
+    });
   }
 
   async updatePreview(): Promise<void> {
@@ -205,5 +218,21 @@ for i in range(10):
     this.markdownContent = '';
     this.filename = 'document.pdf';
     this.updatePreview();
+  }
+
+  // Theme Methods
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
+
+  // Print Preview Method
+  openPrintPreview(): void {
+    if (!this.markdownContent.trim()) {
+      alert('Please enter some markdown content first.');
+      return;
+    }
+
+    const title = this.filename.replace('.pdf', '') || 'Markdown Document';
+    this.printPreviewService.openPrintPreview(this.htmlPreview, title);
   }
 }
