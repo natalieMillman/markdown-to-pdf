@@ -156,6 +156,7 @@
   transition: all 0.3s ease;
   background: #f8f9fa;
   position: relative;
+  width: 100%;
 }
 
 .file-upload-area:hover {
@@ -311,6 +312,67 @@
   
   .upload-text p {
     font-size: 0.9rem;
+  }
+  
+  /* Ensure all grids stack properly on mobile */
+  .pdf-config-grid,
+  .display-settings-grid,
+  .export-format-grid,
+  .margins-grid,
+  .size-inputs {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+  
+  /* Center all content on mobile */
+  .card {
+    text-align: center;
+  }
+  
+  .form-group {
+    text-align: center;
+  }
+  
+  .form-label {
+    text-align: center;
+  }
+  
+  /* Make buttons full width on mobile */
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header p {
+    font-size: 0.9rem;
+  }
+  
+  .file-upload-area {
+    padding: 25px 12px;
+  }
+  
+  .upload-icon {
+    font-size: 2rem;
+  }
+  
+  .upload-text p {
+    font-size: 0.85rem;
+  }
+  
+  .upload-text .upload-subtitle {
+    font-size: 0.8rem;
   }
 }
 
@@ -472,6 +534,23 @@ body[data-theme="dark"] .config-divider {
     flex-direction: column;
     gap: 15px;
     text-align: center;
+  }
+  
+  .margins-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .margins-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .size-inputs {
+    gap: 8px;
   }
 }
 
@@ -721,5 +800,45 @@ body[data-theme="dark"] .font-preview {
   
   .font-size-buttons {
     justify-content: space-between;
+  }
+  
+  /* Ensure all form controls are properly sized on mobile */
+  .form-control {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  /* Center all labels and content on mobile */
+  .form-label {
+    text-align: center;
+  }
+  
+  .form-group {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .export-format-option {
+    padding: 10px 12px;
+  }
+  
+  .format-icon {
+    font-size: 1.2rem;
+  }
+  
+  .format-label {
+    font-size: 0.8rem;
+  }
+  
+  .font-size-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-font-size {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
   }
 }

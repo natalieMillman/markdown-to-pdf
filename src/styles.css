@@ -23,6 +23,7 @@ body[data-theme="dark"] {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
 }
 
 .card {
@@ -32,6 +33,7 @@ body[data-theme="dark"] {
   padding: 30px;
   margin-bottom: 20px;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 body[data-theme="dark"] .card {
@@ -75,6 +77,7 @@ body[data-theme="dark"] .card {
 
 .form-group {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .form-label {
@@ -128,6 +131,7 @@ textarea.form-control {
   min-height: 300px;
   overflow-y: auto;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 body[data-theme="dark"] .preview-container {
@@ -359,25 +363,89 @@ body[data-theme="dark"] .preview-container .katex .base {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
+  .container {
+    padding: 15px;
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .card {
+    padding: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+    min-width: 0;
+  }
+  
+  /* Ensure form controls stretch to full width on mobile */
+  .form-group {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .form-control {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  /* Center content better on mobile */
+  .card {
+    text-align: center;
+  }
+  
+  /* Adjust button group for mobile */
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
   .container {
     padding: 10px;
   }
   
   .card {
-    padding: 20px;
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+  
+  .grid {
+    gap: 12px;
+  }
+  
+  /* Ensure all content is properly centered and stretched on very small screens */
+  .card {
+    text-align: center;
+  }
+  
+  .form-group {
+    text-align: center;
+  }
+  
+  .form-label {
+    text-align: center;
   }
 }
 
 .header {
   text-align: center;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .header h1 {
@@ -396,10 +464,18 @@ body[data-theme="dark"] .preview-container .katex .base {
   display: flex;
   gap: 10px;
   margin-top: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 480px) {
   .button-group {
     flex-direction: column;
+    align-items: center;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+    max-width: 300px;
   }
 }
