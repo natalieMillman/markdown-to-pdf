@@ -10,43 +10,56 @@ import { ExportService } from './services/export.service';
 import { DisplaySettingsService } from './services/display-settings.service';
 import { BehaviorSubject } from 'rxjs';
 
-describe('AppComponent (Karma/Jasmine)', () => {
+describe('AppComponent (Jest)', () => {
   let component: AppComponent;
   let fixture: any;
 
   beforeEach(async () => {
-    const mockPdfService = jasmine.createSpyObj('PdfService', ['markdownToHtml', 'generatePDFFromMarkdown']);
-    const mockFileService = jasmine.createSpyObj('FileService', ['readFileAsText']);
-    const mockThemeService = jasmine.createSpyObj('ThemeService', ['toggleTheme', 'setTheme']);
-    const mockPrintPreviewService = jasmine.createSpyObj('PrintPreviewService', ['openPrintPreview']);
-    const mockSyntaxMathService = jasmine.createSpyObj('SyntaxMathService', ['isReady', 'processContent']);
-    const mockExportService = jasmine.createSpyObj('ExportService', ['exportHTML', 'exportDOCX', 'exportEPUB']);
-    const mockDisplaySettingsService = jasmine.createSpyObj('DisplaySettingsService', [
-      'getCurrentSettings', 'setFontFamily', 'setFontSize', 'resetToDefaults', 'getFontsByCategory'
-    ]);
-
-    // Set up return values
-    mockPdfService.markdownToHtml.and.returnValue(Promise.resolve('<p>Mock HTML</p>'));
-    mockPdfService.generatePDFFromMarkdown.and.returnValue(Promise.resolve());
-    mockFileService.readFileAsText.and.returnValue(Promise.resolve('# Mock File Content'));
-    mockSyntaxMathService.isReady.and.returnValue(true);
+    const mockPdfService = jest.fn().mockReturnValue({
+      markdownToHtml: jest.fn().mockResolvedValue('<p>Mock HTML</p>'),
+      generatePDFFromMarkdown: jest.fn().mockResolvedValue(undefined)
+    })();
+    const mockFileService = jest.fn().mockReturnValue({
+      readFileAsText: jest.fn().mockResolvedValue('# Mock File Content')
+    })();
+    const mockThemeService = jest.fn().mockReturnValue({
+      toggleTheme: jest.fn(),
+      setTheme: jest.fn(),
+      theme$: new BehaviorSubject('light')
+    })();
+    const mockPrintPreviewService = jest.fn().mockReturnValue({
+      openPrintPreview: jest.fn()
+    })();
+    const mockSyntaxMathService = jest.fn().mockReturnValue({
+      isReady: jest.fn().mockReturnValue(true),
+      processContent: jest.fn()
+    })();
+    const mockExportService = jest.fn().mockReturnValue({
+      exportHTML: jest.fn(),
+      exportDOCX: jest.fn(),
+      exportEPUB: jest.fn()
+    })();
+    const mockDisplaySettingsService = jest.fn().mockReturnValue({
+      getCurrentSettings: jest.fn().mockReturnValue({
+        fontFamily: { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' },
+        fontSize: 16
+      }),
+      setFontFamily: jest.fn(),
+      setFontSize: jest.fn(),
+      resetToDefaults: jest.fn(),
+      getFontsByCategory: jest.fn().mockReturnValue([
+        { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' }
+      ]),
+      settings$: new BehaviorSubject({
+        fontFamily: { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' },
+        fontSize: 16
+      }),
+      fontFamilies: [
+        { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' }
+      ]
+    })();
     
-    // Set up observables
-    mockThemeService.theme$ = new BehaviorSubject('light');
-    mockDisplaySettingsService.settings$ = new BehaviorSubject({
-      fontFamily: { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' },
-      fontSize: 16
-    });
-    mockDisplaySettingsService.fontFamilies = [
-      { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' }
-    ];
-    mockDisplaySettingsService.getCurrentSettings.and.returnValue({
-      fontFamily: { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' },
-      fontSize: 16
-    });
-    mockDisplaySettingsService.getFontsByCategory.and.returnValue([
-      { name: 'Inter', value: 'Inter, sans-serif', category: 'sans-serif' }
-    ]);
+
 
     await TestBed.configureTestingModule({
       imports: [AppComponent, FormsModule],

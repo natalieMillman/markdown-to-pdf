@@ -1,22 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
 
-describe('ThemeService (Karma/Jasmine)', () => {
+describe('ThemeService (Jest)', () => {
   let service: ThemeService;
 
   beforeEach(() => {
     // Mock localStorage
     const mockLocalStorage = {
-      getItem: jasmine.createSpy('getItem').and.returnValue(null),
-      setItem: jasmine.createSpy('setItem'),
-      removeItem: jasmine.createSpy('removeItem'),
-      clear: jasmine.createSpy('clear')
+      getItem: jest.fn().mockReturnValue(null),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+      clear: jest.fn()
     };
     
     Object.defineProperty(window, 'localStorage', { value: mockLocalStorage, writable: true });
 
     // Mock document.body.setAttribute
-    spyOn(document.body, 'setAttribute');
+    jest.spyOn(document.body, 'setAttribute');
 
     TestBed.configureTestingModule({});
     service = TestBed.inject(ThemeService);
