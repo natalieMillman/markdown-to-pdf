@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PdfService, PDFConfig, PDF_FORMATS, DEFAULT_MARGINS, PDFPageFormat, PDFMargins } from './services/pdf.service';
@@ -8,6 +8,7 @@ import { PrintPreviewService } from './services/print-preview.service';
 import { SyntaxMathService } from './services/syntax-math.service';
 import { ExportService, ExportFormat } from './services/export.service';
 import { DisplaySettingsService, FontFamily, DisplaySettings } from './services/display-settings.service';
+import { AnalyticsService } from './services/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ import { DisplaySettingsService, FontFamily, DisplaySettings } from './services/
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Markdown to PDF Converter';
   markdownContent = `# Welcome to Markdown to PDF Converter
 
@@ -98,6 +99,7 @@ $$A = \\pi r^2$$
   constructor(
     private pdfService: PdfService, 
     private fileService: FileService,
+    private analyticsService: AnalyticsService,
     private themeService: ThemeService,
     private printPreviewService: PrintPreviewService,
     private syntaxMathService: SyntaxMathService,
@@ -118,6 +120,17 @@ $$A = \\pi r^2$$
     // Subscribe to display settings changes
     this.displaySettingsService.settings$.subscribe(settings => {
       this.displaySettings = settings;
+    });
+  }
+
+  ngOnInit(): void {
+    // Track initial page view
+    this.analyticsService.trackPageView(this.title, '/');
+    
+    // Track app initialization
+    this.analyticsService.trackUserEngagement('app_initialized', {
+      theme: this.isDarkMode ? 'dark' : 'light',
+      display_settings: this.displaySettings
     });
   }
 
@@ -324,6 +337,10 @@ cx + dy
   // Theme Methods
   toggleTheme(): void {
     this.themeService.toggleTheme();
+    
+    // Track theme change
+    const newTheme = this.themeService.getCurrentTheme();
+    this.analyticsService.trackThemeChange(newTheme);
   }
 
   // Print Preview Method
