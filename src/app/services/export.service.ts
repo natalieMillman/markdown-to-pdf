@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
 
 export type ExportFormat = 'html' | 'docx' | 'epub';
 
@@ -38,8 +38,8 @@ export class ExportService {
         }]
       });
 
-      const buffer = await Packer.toBuffer(doc);
-      this.downloadFile(buffer, filename, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      const blob = await Packer.toBlob(doc);
+      this.downloadFile(blob, filename, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     } catch (error) {
       console.error('Error generating DOCX:', error);
       throw new Error('Failed to generate DOCX. Please try again.');
