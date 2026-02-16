@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="header">
+<main class="container">
+  <header class="header">
     <div class="header-content">
       <div class="title-section">
         <h1>📄 Markdown to PDF</h1>
@@ -8,71 +8,80 @@
       <div class="header-controls">
         <div class="theme-toggle-container">
           <span class="theme-label">{{ isDarkMode ? 'Dark Mode' : 'Light Mode' }}</span>
-          <button 
-            class="btn btn-theme-toggle" 
+          <button
+            class="btn btn-theme-toggle"
             (click)="toggleTheme()"
-            [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+            [title]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+            [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
             {{ isDarkMode ? '☀️' : '🌙' }}
           </button>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- File Upload Section -->
-  <div class="card">
+  <section class="card" aria-label="File upload">
     <div class="form-group">
       <label class="form-label">Upload Markdown File:</label>
-      <div 
-        class="file-upload-area" 
+      <div
+        class="file-upload-area"
+        role="button"
+        tabindex="0"
         [class.drag-over]="isDragOver"
         [class.uploading]="isUploading"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave($event)"
         (drop)="onDrop($event)"
-        (click)="fileInput.click()">
-        
+        (click)="fileInput.click()"
+        (keydown.enter)="fileInput.click()"
+        (keydown.space)="fileInput.click()"
+        aria-label="Upload markdown file. Click to browse or drag and drop.">
+
         <div class="upload-content">
-          <div class="upload-icon">📁</div>
+          <div class="upload-icon" aria-hidden="true">📁</div>
           <div class="upload-text">
             <p><strong>Click to browse</strong> or drag and drop your markdown file here</p>
             <p class="upload-subtitle">Supports .md, .markdown, and .txt files</p>
           </div>
         </div>
-        
-        <input 
+
+        <input
           #fileInput
-          type="file" 
+          type="file"
           accept=".md,.markdown,.txt,text/markdown,text/plain"
           (change)="onFileSelect($event)"
+          aria-label="Select markdown file"
           style="display: none;">
       </div>
-      
+
       <div *ngIf="uploadedFileName" class="uploaded-file-info">
         <div class="file-info">
-          <span class="file-icon">📄</span>
+          <span class="file-icon" aria-hidden="true">📄</span>
           <span class="file-name">{{ uploadedFileName }}</span>
-          <button class="btn-clear-file" (click)="clearUploadedFile()" title="Remove file">
+          <button class="btn-clear-file" (click)="clearUploadedFile()" title="Remove file" aria-label="Remove uploaded file">
             ❌
           </button>
         </div>
       </div>
-      
-      <div *ngIf="isUploading" class="upload-progress">
-        <div class="loading-spinner"></div>
+
+      <div *ngIf="isUploading" class="upload-progress" role="status" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
         <span>Reading file...</span>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- PDF Generation Section -->
-  <div class="card">
+  <section class="card" aria-label="PDF configuration and generation">
     <div class="pdf-config-header">
-      <h3>PDF Configuration</h3>
-      <button 
-        class="btn btn-toggle" 
+      <h2>PDF Configuration</h2>
+      <button
+        class="btn btn-toggle"
         (click)="toggleAdvancedOptions()"
-        type="button">
+        type="button"
+        [attr.aria-expanded]="showAdvancedOptions"
+        aria-controls="advanced-options">
         {{ showAdvancedOptions ? '🔼 Hide Advanced' : '🔽 Show Advanced' }}
       </button>
     </div>
@@ -81,20 +90,20 @@
     <div class="pdf-config-grid">
       <div class="form-group">
         <label class="form-label" for="filename">PDF Filename:</label>
-        <input 
-          id="filename" 
-          type="text" 
-          class="form-control" 
-          [(ngModel)]="filename" 
+        <input
+          id="filename"
+          type="text"
+          class="form-control"
+          [(ngModel)]="filename"
           placeholder="Enter filename (e.g., my-document.pdf)">
       </div>
 
       <div class="form-group">
         <label class="form-label" for="format">Page Format:</label>
-        <select 
-          id="format" 
-          class="form-control" 
-          [(ngModel)]="selectedFormat" 
+        <select
+          id="format"
+          class="form-control"
+          [(ngModel)]="selectedFormat"
           (change)="onFormatChange()">
           <option *ngFor="let key of getFormatKeys()" [ngValue]="pdfFormats[key]">
             {{ pdfFormats[key].name }}
@@ -112,149 +121,159 @@
 
       <div class="form-group">
         <label class="form-label">Page Size:</label>
-        <div class="page-size-display">{{ getPageDimensions() }}</div>
+        <div class="page-size-display" aria-live="polite">{{ getPageDimensions() }}</div>
       </div>
     </div>
 
     <!-- Advanced Configuration -->
-    <div *ngIf="showAdvancedOptions" class="advanced-config">
+    <div *ngIf="showAdvancedOptions" id="advanced-options" class="advanced-config">
       <hr class="config-divider">
-      
+
       <!-- Custom Size Controls -->
       <div *ngIf="selectedFormat.name === 'Custom'" class="custom-size-controls">
-        <h4>Custom Page Size</h4>
+        <h3>Custom Page Size</h3>
         <div class="size-inputs">
           <div class="form-group">
             <label class="form-label" for="customWidth">Width (mm):</label>
-            <input 
-              id="customWidth" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="customWidth" 
-              min="50" 
+            <input
+              id="customWidth"
+              type="number"
+              class="form-control"
+              [(ngModel)]="customWidth"
+              min="50"
               max="500">
           </div>
           <div class="form-group">
             <label class="form-label" for="customHeight">Height (mm):</label>
-            <input 
-              id="customHeight" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="customHeight" 
-              min="50" 
+            <input
+              id="customHeight"
+              type="number"
+              class="form-control"
+              [(ngModel)]="customHeight"
+              min="50"
               max="500">
           </div>
         </div>
       </div>
 
       <!-- Margins Controls -->
-      <div class="margins-controls">
+      <fieldset class="margins-controls">
         <div class="margins-header">
-          <h4>Page Margins (mm)</h4>
-          <button 
-            class="btn btn-reset" 
-            (click)="resetMargins()" 
-            type="button">
+          <legend><h3>Page Margins (mm)</h3></legend>
+          <button
+            class="btn btn-reset"
+            (click)="resetMargins()"
+            type="button"
+            aria-label="Reset page margins to defaults">
             🔄 Reset
           </button>
         </div>
         <div class="margins-grid">
           <div class="form-group">
             <label class="form-label" for="marginTop">Top:</label>
-            <input 
-              id="marginTop" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="margins.top" 
-              min="0" 
+            <input
+              id="marginTop"
+              type="number"
+              class="form-control"
+              [(ngModel)]="margins.top"
+              min="0"
               max="50">
           </div>
           <div class="form-group">
             <label class="form-label" for="marginRight">Right:</label>
-            <input 
-              id="marginRight" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="margins.right" 
-              min="0" 
+            <input
+              id="marginRight"
+              type="number"
+              class="form-control"
+              [(ngModel)]="margins.right"
+              min="0"
               max="50">
           </div>
           <div class="form-group">
             <label class="form-label" for="marginBottom">Bottom:</label>
-            <input 
-              id="marginBottom" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="margins.bottom" 
-              min="0" 
+            <input
+              id="marginBottom"
+              type="number"
+              class="form-control"
+              [(ngModel)]="margins.bottom"
+              min="0"
               max="50">
           </div>
           <div class="form-group">
             <label class="form-label" for="marginLeft">Left:</label>
-            <input 
-              id="marginLeft" 
-              type="number" 
-              class="form-control" 
-              [(ngModel)]="margins.left" 
-              min="0" 
+            <input
+              id="marginLeft"
+              type="number"
+              class="form-control"
+              [(ngModel)]="margins.left"
+              min="0"
               max="50">
           </div>
         </div>
-      </div>
+      </fieldset>
     </div>
 
-    <div class="button-group">
-      <button 
-        class="btn btn-primary" 
-        (click)="generatePDF()" 
-        [disabled]="isGenerating">
+    <nav class="button-group" aria-label="Document actions">
+      <button
+        class="btn btn-primary"
+        (click)="generatePDF()"
+        [disabled]="isGenerating"
+        aria-label="Generate PDF document">
         {{ isGenerating ? '🔄 Generating...' : '📥 Generate PDF' }}
       </button>
-      <button 
-        class="btn btn-secondary" 
+      <button
+        class="btn btn-secondary"
         (click)="exportDocument()"
-        [disabled]="isExporting || !markdownContent.trim()">
+        [disabled]="isExporting || !markdownContent.trim()"
+        aria-label="Export document in selected format">
         {{ getExportButtonText() }}
       </button>
-      <button 
-        class="btn btn-secondary" 
+      <button
+        class="btn btn-secondary"
         (click)="openPrintPreview()"
-        [disabled]="!markdownContent.trim()">
+        [disabled]="!markdownContent.trim()"
+        aria-label="Open print preview">
         🖨️ Print Preview
       </button>
-      <button class="btn btn-secondary" (click)="loadSample()">
+      <button class="btn btn-secondary" (click)="loadSample()" aria-label="Load sample markdown content">
         📋 Load Sample
       </button>
-      <button class="btn btn-secondary" (click)="clearContent()">
+      <button class="btn btn-secondary" (click)="clearContent()" aria-label="Clear all content">
         🗑️ Clear
       </button>
-    </div>
+    </nav>
 
     <!-- Export Format Selection -->
     <div class="export-format-section">
       <div class="form-group">
         <label class="form-label">Export Format:</label>
-        <div class="export-format-grid">
-          <div *ngFor="let format of exportFormats" 
+        <div class="export-format-grid" role="radiogroup" aria-label="Export format selection">
+          <div *ngFor="let format of exportFormats"
                class="export-format-option"
+               role="radio"
+               tabindex="0"
                [class.selected]="selectedExportFormat === format.value"
-               (click)="selectedExportFormat = format.value">
-            <span class="format-icon">{{ format.icon }}</span>
+               [attr.aria-checked]="selectedExportFormat === format.value"
+               (click)="selectedExportFormat = format.value"
+               (keydown.enter)="selectedExportFormat = format.value"
+               (keydown.space)="selectedExportFormat = format.value; $event.preventDefault()">
+            <span class="format-icon" aria-hidden="true">{{ format.icon }}</span>
             <span class="format-label">{{ format.label }}</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Display Settings -->
-  <div class="card">
+  <section class="card" aria-label="Display settings">
     <div class="display-settings-header">
-      <h3>Display Settings</h3>
-      <button 
-        class="btn btn-reset" 
-        (click)="resetDisplaySettings()" 
-        type="button">
+      <h2>Display Settings</h2>
+      <button
+        class="btn btn-reset"
+        (click)="resetDisplaySettings()"
+        type="button"
+        aria-label="Reset display settings to defaults">
         🔄 Reset
       </button>
     </div>
@@ -262,25 +281,25 @@
     <div class="display-settings-grid">
       <div class="form-group">
         <label class="form-label" for="fontFamily">Font Family:</label>
-        <select 
-          id="fontFamily" 
-          class="form-control" 
+        <select
+          id="fontFamily"
+          class="form-control"
           [value]="displaySettings.fontFamily.value"
           (change)="onFontFamilyChange($any($event.target).value)">
           <optgroup label="Sans-serif">
-            <option *ngFor="let font of getSansSerifFonts()" 
+            <option *ngFor="let font of getSansSerifFonts()"
                     [value]="font.value">
               {{ font.name }}
             </option>
           </optgroup>
           <optgroup label="Serif">
-            <option *ngFor="let font of getSerifFonts()" 
+            <option *ngFor="let font of getSerifFonts()"
                     [value]="font.value">
               {{ font.name }}
             </option>
           </optgroup>
           <optgroup label="Monospace">
-            <option *ngFor="let font of getMonospaceFonts()" 
+            <option *ngFor="let font of getMonospaceFonts()"
                     [value]="font.value">
               {{ font.name }}
             </option>
@@ -291,27 +310,30 @@
       <div class="form-group">
         <label class="form-label" for="fontSize">Font Size: {{ displaySettings.fontSize }}px</label>
         <div class="font-size-controls">
-          <input 
+          <input
             id="fontSize"
-            type="range" 
-            class="font-size-slider" 
-            min="10" 
-            max="24" 
+            type="range"
+            class="font-size-slider"
+            min="10"
+            max="24"
             step="1"
             [value]="displaySettings.fontSize"
-            (input)="onFontSizeChange(+$any($event.target).value)">
+            (input)="onFontSizeChange(+$any($event.target).value)"
+            aria-label="Font size slider">
           <div class="font-size-buttons">
-            <button 
-              class="btn btn-font-size" 
+            <button
+              class="btn btn-font-size"
               (click)="onFontSizeChange(displaySettings.fontSize - 1)"
-              [disabled]="displaySettings.fontSize <= 10">
+              [disabled]="displaySettings.fontSize <= 10"
+              aria-label="Decrease font size">
               −
             </button>
-            <span class="font-size-display">{{ displaySettings.fontSize }}px</span>
-            <button 
-              class="btn btn-font-size" 
+            <span class="font-size-display" aria-live="polite">{{ displaySettings.fontSize }}px</span>
+            <button
+              class="btn btn-font-size"
               (click)="onFontSizeChange(displaySettings.fontSize + 1)"
-              [disabled]="displaySettings.fontSize >= 24">
+              [disabled]="displaySettings.fontSize >= 24"
+              aria-label="Increase font size">
               +
             </button>
           </div>
@@ -325,19 +347,20 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <div class="grid">
-    <div class="card">
+    <section class="card" aria-label="Markdown editor">
       <div class="form-group">
         <label class="form-label" for="markdown">Markdown Content:</label>
-        <textarea 
+        <textarea
           id="markdown"
-          class="form-control" 
-          [(ngModel)]="markdownContent" 
+          class="form-control"
+          [(ngModel)]="markdownContent"
           (input)="updatePreview()"
+          aria-label="Markdown content editor"
           placeholder="Type your markdown here...
-          
+
 Example:
 # My Document
 This is **bold** and *italic* text.
@@ -349,13 +372,13 @@ This is **bold** and *italic* text.
 console.log('Hello World!');
 ```"></textarea>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
+    <section class="card" aria-label="Live preview">
       <div class="form-group">
         <label class="form-label">Live Preview:</label>
-        <div class="preview-container" [innerHTML]="htmlPreview"></div>
+        <div class="preview-container" [innerHTML]="htmlPreview" aria-live="polite" role="region" aria-label="Rendered markdown preview"></div>
       </div>
-    </div>
+    </section>
   </div>
-</div>
+</main>

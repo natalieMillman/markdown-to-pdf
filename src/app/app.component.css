@@ -384,10 +384,20 @@
   margin-bottom: 20px;
 }
 
-.pdf-config-header h3 {
+.pdf-config-header h2 {
   margin: 0;
   color: #2c3e50;
   font-size: 1.2rem;
+}
+
+fieldset.margins-controls {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+fieldset.margins-controls legend {
+  padding: 0;
 }
 
 .btn-toggle {
@@ -449,7 +459,7 @@
   margin-bottom: 25px;
 }
 
-.custom-size-controls h4 {
+.custom-size-controls h3 {
   color: #2c3e50;
   margin-bottom: 15px;
   font-size: 1rem;
@@ -461,7 +471,7 @@
   gap: 15px;
 }
 
-.margins-controls h4 {
+.margins-controls h3 {
   color: #2c3e50;
   margin-bottom: 15px;
   font-size: 1rem;
@@ -496,7 +506,7 @@
 }
 
 /* Dark mode styles for PDF config */
-body[data-theme="dark"] .pdf-config-header h3 {
+body[data-theme="dark"] .pdf-config-header h2 {
   color: #ecf0f1;
 }
 
@@ -506,8 +516,8 @@ body[data-theme="dark"] .page-size-display {
   color: #bdc3c7;
 }
 
-body[data-theme="dark"] .custom-size-controls h4,
-body[data-theme="dark"] .margins-controls h4 {
+body[data-theme="dark"] .custom-size-controls h3,
+body[data-theme="dark"] .margins-controls h3 {
   color: #ecf0f1;
 }
 
@@ -617,7 +627,7 @@ body[data-theme="dark"] .config-divider {
   margin-bottom: 20px;
 }
 
-.display-settings-header h3 {
+.display-settings-header h2 {
   margin: 0;
   color: #2c3e50;
   font-size: 1.2rem;
@@ -745,7 +755,7 @@ body[data-theme="dark"] .export-format-option.selected .format-label {
   color: #a8d2ff;
 }
 
-body[data-theme="dark"] .display-settings-header h3 {
+body[data-theme="dark"] .display-settings-header h2 {
   color: #ecf0f1;
 }
 
