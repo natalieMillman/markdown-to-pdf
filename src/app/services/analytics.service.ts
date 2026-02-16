@@ -12,7 +12,72 @@ declare global {
 })
 export class AnalyticsService {
 
-  constructor() { }
+  constructor() {
+    this.initWebVitals();
+  }
+
+  /**
+   * Initialize Core Web Vitals tracking (LCP, CLS, INP, FCP, TTFB)
+   * These metrics are used by Google for search ranking signals.
+   */
+  private async initWebVitals(): Promise<void> {
+    try {
+      const { onCLS, onINP, onLCP, onFCP, onTTFB } = await import('web-vitals');
+
+      onCLS((metric) => {
+        this.trackEvent('web_vitals', {
+          metric_name: 'CLS',
+          metric_value: metric.value,
+          metric_delta: metric.delta,
+          metric_rating: metric.rating,
+          metric_id: metric.id
+        });
+      });
+
+      onINP((metric) => {
+        this.trackEvent('web_vitals', {
+          metric_name: 'INP',
+          metric_value: metric.value,
+          metric_delta: metric.delta,
+          metric_rating: metric.rating,
+          metric_id: metric.id
+        });
+      });
+
+      onLCP((metric) => {
+        this.trackEvent('web_vitals', {
+          metric_name: 'LCP',
+          metric_value: metric.value,
+          metric_delta: metric.delta,
+          metric_rating: metric.rating,
+          metric_id: metric.id
+        });
+      });
+
+      onFCP((metric) => {
+        this.trackEvent('web_vitals', {
+          metric_name: 'FCP',
+          metric_value: metric.value,
+          metric_delta: metric.delta,
+          metric_rating: metric.rating,
+          metric_id: metric.id
+        });
+      });
+
+      onTTFB((metric) => {
+        this.trackEvent('web_vitals', {
+          metric_name: 'TTFB',
+          metric_value: metric.value,
+          metric_delta: metric.delta,
+          metric_rating: metric.rating,
+          metric_id: metric.id
+        });
+      });
+    } catch (error) {
+      // Silently fail — web vitals tracking is non-critical
+      console.warn('Web Vitals tracking unavailable:', error);
+    }
+  }
 
   /**
    * Track page view

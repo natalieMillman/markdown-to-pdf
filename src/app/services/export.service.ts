@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
-import JSZip from 'jszip';
+// docx and jszip are lazy-loaded at export time to reduce initial bundle size
 
 export type ExportFormat = 'html' | 'docx' | 'epub';
 
@@ -31,10 +30,13 @@ export class ExportService {
    */
   async exportDOCX(htmlContent: string, filename: string, options: ExportOptions): Promise<void> {
     try {
+      const docxModule = await import('docx');
+      const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxModule;
+
       const doc = new Document({
         sections: [{
           properties: {},
-          children: this.htmlToDocxElements(htmlContent, options)
+          children: this.htmlToDocxElements(htmlContent, options, { Paragraph, TextRun, HeadingLevel, AlignmentType })
         }]
       });
 
@@ -51,6 +53,8 @@ export class ExportService {
    */
   async exportEPUB(htmlContent: string, filename: string, options: ExportOptions): Promise<void> {
     try {
+      const JSZipModule = await import('jszip');
+      const JSZip = JSZipModule.default;
       const zip = new JSZip();
       
       // Create EPUB structure
@@ -153,9 +157,10 @@ export class ExportService {
   /**
    * Convert HTML to DOCX elements (simplified)
    */
-  private htmlToDocxElements(htmlContent: string, options: ExportOptions): Paragraph[] {
-    const elements: Paragraph[] = [];
-    
+  private htmlToDocxElements(htmlContent: string, options: ExportOptions, docx: any): any[] {
+    const { Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
+    const elements: any[] = [];
+
     // Add title
     elements.push(new Paragraph({
       children: [new TextRun({ text: options.title, bold: true, size: Math.round(options.fontSize * 1.5) })],
@@ -166,11 +171,11 @@ export class ExportService {
     // Simple HTML to DOCX conversion (basic implementation)
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlContent;
-    
+
     const textContent = tempDiv.textContent || tempDiv.innerText || '';
-    const paragraphs = textContent.split('\n\n').filter(p => p.trim());
-    
-    paragraphs.forEach(paragraph => {
+    const paragraphs = textContent.split('\n\n').filter((p: string) => p.trim());
+
+    paragraphs.forEach((paragraph: string) => {
       if (paragraph.trim()) {
         elements.push(new Paragraph({
           children: [new TextRun({ text: paragraph.trim(), size: options.fontSize })],

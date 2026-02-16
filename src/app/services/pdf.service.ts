@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { marked } from 'marked';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-// Note: We'll handle syntax highlighting in post-processing instead
+// jsPDF and html2canvas are lazy-loaded at generation time to reduce initial bundle size
 import { SyntaxMathService } from './syntax-math.service';
 import { DisplaySettingsService } from './display-settings.service';
 
@@ -187,6 +185,14 @@ export class PdfService {
 
       // Add to document temporarily
       document.body.appendChild(tempContainer);
+
+      // Lazy-load heavy libraries only when generating PDF
+      const [html2canvasModule, jsPDFModule] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf')
+      ]);
+      const html2canvas = html2canvasModule.default;
+      const jsPDF = jsPDFModule.default;
 
       // Convert HTML to canvas
       const canvas = await html2canvas(tempContainer, {

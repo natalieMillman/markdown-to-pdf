@@ -5,6 +5,31 @@
   box-sizing: border-box;
 }
 
+/* Skip to main content link (accessibility) */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-to-main:focus {
+  left: 0;
+}
+
+/* Ensure visible focus outlines for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -473,9 +498,123 @@ body[data-theme="dark"] .preview-container .katex .base {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .button-group .btn {
     width: 100%;
     max-width: 300px;
+  }
+}
+
+/* Accessibility: Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility: High contrast preference */
+@media (prefers-contrast: more) {
+  body {
+    background: #000;
+    color: #fff;
+  }
+
+  .card {
+    background: #000;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+
+  .form-control {
+    background: #000;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+
+  .form-label {
+    color: #fff;
+  }
+
+  .btn {
+    border: 2px solid #fff;
+  }
+
+  .btn-primary {
+    background: #0050d8;
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background: #000;
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .preview-container {
+    background: #000;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+
+  a {
+    color: #80b3ff;
+    text-decoration: underline;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+
+  .header,
+  .button-group,
+  .file-upload-area,
+  .upload-progress,
+  .uploaded-file-info,
+  .theme-toggle-container,
+  .skip-to-main,
+  .btn-toggle,
+  .btn-reset,
+  .export-format-section,
+  .pdf-config-header,
+  .pdf-config-grid,
+  .advanced-config,
+  .display-settings-header,
+  .display-settings-grid,
+  .font-size-controls,
+  .font-preview {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+
+  .preview-container {
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+  }
+
+  a {
+    text-decoration: underline;
+    color: black;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
   }
 }
