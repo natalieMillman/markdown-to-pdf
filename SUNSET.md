@@ -1,6 +1,6 @@
 # Retiring markdown-to-pdf
 
-Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: in progress. Steps 1 to 3 were done on 2026-10-25, and step 4 was skipped. Step 5 is done apart from two things: deleting the hosted zone after the registration ends on 2027-08-11, and removing this repository from the AWS Amplify GitHub App, which is on hold. Step 6 is next.
+Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: in progress. Steps 1 to 3 were done on 2026-10-25, and step 4 was skipped. Step 5 is done apart from two things: deleting the hosted zone after the registration ends on 2027-08-11, and removing this repository from the AWS Amplify GitHub App, which is on hold. In step 6, the changes to this repository and loqui-infra are made; archiving this repository and closing issue #14 are left.
 
 ## What's deployed
 
@@ -129,6 +129,8 @@ The steps:
 - In Google Analytics, delete the web data stream, or leave it to keep the history.
 
 ### 6. Wrap up the repository
+
+The changes to both repositories were made on 2026-10-25. Besides the files below, they deleted `TESTING_OPTIONS.md`, which only covered the Amplify build files, and `sitemap.xml` with its entry in `angular.json`, since the dead address was all it listed. The README's Node.js prerequisite now matches what Angular 22 needs, which `amplify.yml` used to pin. The teardown steps in loqui-infra's README that steps 3 and 5 refer to went with `MarkdownToPdfStack`, and are in that repository's git history. Still to do: archive this repository, then close issue #14.
 
 - In this repository: say in the README that the hosted version is retired and how to run it locally. Delete `amplify.yml`, `amplify-with-tests.yml` and `AWS_AMPLIFY_FIX.md`, and remove the `amplifyapp.com` address from `src/index.html`, `src/assets/robots.txt` and `src/assets/sitemap.xml`. Then archive the repository (Settings → Archive this repository), which makes it read-only.
 - In loqui-infra: delete `MarkdownToPdfStack` (the last teardown step in its README). The record stays in git history.
