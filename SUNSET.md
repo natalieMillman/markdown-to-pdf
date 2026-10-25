@@ -69,6 +69,13 @@ for metric in BytesDownloaded Requests; do
     --start-time 2026-09-25T00:00:00Z --end-time 2026-10-25T00:00:00Z
 done
 
+# What the firewall blocked and allowed in the same 30 days
+for metric in BlockedRequests AllowedRequests; do
+  aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name $metric \
+    --dimensions Name=WebACL,Value=CreatedByAmplify-d1ielvxvstj604-3ff02703-6898-4d5f-af87-e9379b99806e Name=Rule,Value=ALL \
+    --statistics Sum --period 2592000 --start-time 2026-09-25T00:00:00Z --end-time 2026-10-25T00:00:00Z
+done
+
 # The domain and its DNS records
 aws route53domains get-domain-detail --domain-name convert-markdown-to-pdf.com --query '{autoRenew:AutoRenew,expires:ExpirationDate}'
 aws route53 list-resource-record-sets --hosted-zone-id Z06990637C1AJDTC3YDZ
@@ -80,13 +87,17 @@ aws route53 list-resource-record-sets --hosted-zone-id Z06990637C1AJDTC3YDZ
 
 Done on 2026-10-25: the results are above, and on issue #14. Still to do: check the last 90 days in Google Analytics, to decide on step 4.
 
+The AWS numbers can't settle step 4, because they count crawlers and scanners along with people, but they do cap it. A first visit downloads 167 KB (the page, its script and its styles, compressed), so the 85 MB served in the 30 days to 2026-10-25 is at most about 510 first visits, and bots account for part of that. Traffic has been rising: the last three 30-day periods served 50 MB, 70 MB and 85 MB, over 32,943, 37,839 and 43,124 requests.
+
 ### 2. Record it in loqui-infra
 
-loqui-infra's `MarkdownToPdfStack` describes the app, its `main` branch, the domain association, the web ACL and the hosted zone. Merge it, then follow the import steps in loqui-infra's README, under "markdown-to-pdf (retiring)": compare the stack with the live resources, `cdk import` it, and check it with drift detection. The stack retains every resource, so importing changes nothing in AWS, and neither a failed import nor removing the stack can delete anything. CloudFormation can't import DNS records or a domain registration, so the stack notes those in a comment.
+loqui-infra's `MarkdownToPdfStack` describes the app, its `main` branch, the domain association, the web ACL and the hosted zone. It's merged, and on 2026-10-25 its template still matched the live resources on every property it sets. Next, follow the import steps in loqui-infra's README, under "markdown-to-pdf (retiring)": compare the stack with the live resources, `cdk import` it, and check it with drift detection. The stack retains every resource, so importing changes nothing in AWS, and neither a failed import nor removing the stack can delete anything. CloudFormation can't import DNS records or a domain registration, so the stack notes those in a comment.
 
 ### 3. Turn off the firewall (optional, any time after step 2)
 
 This saves $23 a month without waiting for the rest. In the Amplify console, open the app, then Hosting → Firewall → Actions → Disassociate firewall, and then delete the web ACL. The command is in loqui-infra's teardown steps. The site keeps serving.
+
+In the 30 days to 2026-10-25 the firewall blocked 18,089 requests and allowed 13,291. Its rules block known bad IP addresses (6,583), requests with no user agent or with common exploit patterns (8,263), and other known exploit inputs (3,243). Without it, those requests are served like any other. A probe for a path the site doesn't have gets the app's `index.html`, 15 KB at most, so that's likely a few cents a month of data. Even if every blocked request fetched a whole first visit uncompressed (617 KB), it would be 11 GB, about $1.70.
 
 ### 4. Announce it (optional)
 
