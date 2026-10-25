@@ -1,10 +1,10 @@
 # Retiring markdown-to-pdf
 
-Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: proposed. Nothing has been changed in AWS yet.
+Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: in progress, with steps 1 and 2 done. The only change in AWS so far is three tags that step 2 added to the app's `main` branch.
 
 ## What's deployed
 
-**In AWS**, checked against the account on 2026-10-25. All of it is in us-east-1 or global, and all of it was created in the console, so none of it is in [loqui-infra](https://github.com/natalieMillman/loqui-infra) yet:
+**In AWS**, checked against the account on 2026-10-25. All of it is in us-east-1 or global, and all of it was created in the console. Step 2 records it in [loqui-infra](https://github.com/natalieMillman/loqui-infra), but nothing manages it there:
 
 - **The Amplify Hosting app `d1ielvxvstj604`**, created 2025-08-09. It serves the `main` branch at `https://main.d1ielvxvstj604.amplifyapp.com`, and builds it from this repository's `amplify.yml` on every push to `main`. It has no backend and no service role: conversion and export run in the browser, and nothing is stored on a server.
 - **A firewall.** Amplify's firewall protection is on for the app. It created the AWS WAF web ACL `CreatedByAmplify-d1ielvxvstj604-3ff02703-…`, which runs three AWS managed rule groups: the IP reputation list, the common rule set and known bad inputs.
@@ -31,7 +31,7 @@ The site is live at `https://main.d1ielvxvstj604.amplifyapp.com` and `https://ww
 | WAF requests | 43,124 requests in the 30 days to 2026-10-25, at $0.60 per million | $0.03 |
 | Data served | 85 MB in the same 30 days, at $0.15 per GB | $0.01 |
 | Storage | | Under $0.01 |
-| Builds | None since 2026-07-04. The last build took 3 minutes, about $0.03. | $0 |
+| Builds | Every push to `main` builds. None from 2026-07-04 until this plan's merges on 2026-10-25, which took about 3 minutes and $0.03 each. | $0 |
 | Route 53 hosted zone | | $0.50 |
 | Domain registration | $15 a year. It last renewed in July 2026. | $1.25 |
 
@@ -91,7 +91,9 @@ The AWS numbers can't settle step 4, because they count crawlers and scanners al
 
 ### 2. Record it in loqui-infra
 
-loqui-infra's `MarkdownToPdfStack` describes the app, its `main` branch, the domain association, the web ACL and the hosted zone. It's merged, and on 2026-10-25 its template still matched the live resources on every property it sets. Next, follow the import steps in loqui-infra's README, under "markdown-to-pdf (retiring)": compare the stack with the live resources, `cdk import` it, and check it with drift detection. The stack retains every resource, so importing changes nothing in AWS, and neither a failed import nor removing the stack can delete anything. CloudFormation can't import DNS records or a domain registration, so the stack notes those in a comment.
+Done on 2026-10-25. loqui-infra's `MarkdownToPdfStack` describes the app, its `main` branch, the domain association, the web ACL and the hosted zone, and it matched the live resources on every property it sets. That includes the app's rewrite rules and cache setting, which were made in the console and go with the app. CloudFormation can't import DNS records or a domain registration, so the stack notes those in a comment.
+
+The stack is a record in code only, not imported into CloudFormation. An import turned out not to be read-only: CloudFormation tags each imported resource through its update handler, which for Amplify sends the template's properties to the app, the branch and the domain association. The attempt failed on the app, which Amplify won't update without a GitHub token, after adding three `aws:cloudformation:*` tags to the `main` branch. Those can't be removed, change nothing about how it builds or serves, and go with the app in step 5. Getting past the app would have rerun Amplify's setup of the live custom domain, for a stack that step 5 removes anyway.
 
 ### 3. Turn off the firewall (optional, any time after step 2)
 
@@ -105,7 +107,7 @@ Only worth doing if Google Analytics shows real use. In that case, add a banner 
 
 ### 5. Take it down
 
-- Follow the teardown steps in loqui-infra's README: `cdk destroy` the stack (nothing in AWS changes), turn off the firewall and delete its web ACL if step 3 hasn't, then delete the app with `aws amplify delete-app --app-id d1ielvxvstj604`, which takes its branch and domain association with it.
+- Follow the teardown steps in loqui-infra's README: check that CloudFormation holds none of it, turn off the firewall and delete its web ACL if step 3 hasn't, then delete the app with `aws amplify delete-app --app-id d1ielvxvstj604`, which takes its branch and domain association with it.
 - Check that it's gone: `aws amplify list-apps` no longer lists it, and neither `https://main.d1ielvxvstj604.amplifyapp.com` nor `https://www.convert-markdown-to-pdf.com` serves the app.
 - Decide what happens to the domain. loqui-infra's teardown steps have the commands for both choices:
   - **Let it go.** Turn off auto-renew, and delete the three records that point at the app. Keep the empty hosted zone until the registration ends on 2027-08-11, then delete it. Deleting it sooner would save about $5, but would leave the domain pointing at name servers that no longer answer for it. Once the registration ends, anyone can register the domain, so old links to it could lead somewhere you don't control.
@@ -121,4 +123,4 @@ Only worth doing if Google Analytics shows real use. In that case, add a banner 
 
 ### Undoing it
 
-Steps 1, 2 and 4 change nothing that can't be undone, and neither does the `cdk destroy` in step 5. Turning the firewall off can be undone by turning it back on, which creates a new web ACL. After `delete-app`, the site can come back by connecting this repository to a new Amplify app, but at a new `amplifyapp.com` address: the `d1ielvxvstj604` address is gone for good. If the domain is kept, it can be attached to the new app. Auto-renew can be turned back on until the registration ends; after that, the domain may no longer be available.
+Steps 1 and 4 change nothing in AWS. Step 2 left three tags on the `main` branch that can't be removed, but they change nothing about how it builds or serves, and go with the app. Turning the firewall off can be undone by turning it back on, which creates a new web ACL. After `delete-app`, the site can come back by connecting this repository to a new Amplify app, but at a new `amplifyapp.com` address: the `d1ielvxvstj604` address is gone for good. If the domain is kept, it can be attached to the new app. Auto-renew can be turned back on until the registration ends; after that, the domain may no longer be available.
