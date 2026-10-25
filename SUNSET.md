@@ -37,7 +37,7 @@ Caveats:
 - If WAF is on, it costs more than everything else in the table put together, and the savings rise to $20 a month or more. `get-app` below shows whether it is.
 - Whatever the cost, retiring the project also ends its upkeep: the Angular and dependency upgrades, and the Amplify build fixes.
 
-Prices are from [aws.amazon.com/amplify/pricing](https://aws.amazon.com/amplify/pricing/) for us-east-1.
+Prices are from [aws.amazon.com/amplify/pricing](https://aws.amazon.com/amplify/pricing/), as of October 2026.
 
 ### Measuring the real number
 
