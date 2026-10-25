@@ -1,5 +1,7 @@
 # Markdown to PDF Converter
 
+> **The hosted version is retired.** It was served from AWS Amplify until 2026-10-25 ([issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14), plan in [SUNSET.md](SUNSET.md)). Conversion and export run entirely in the browser, so a local copy does everything the hosted one did: see [Getting Started](#getting-started).
+
 A simple and elegant Angular 20 web application that converts markdown documents to PDF format with real-time preview.
 
 ## Features
@@ -40,14 +42,14 @@ A simple and elegant Angular 20 web application that converts markdown documents
 
 ### Prerequisites
 
-- Node.js (version 18 or higher)
+- Node.js 22.22.3 or a later 22.x, 24.15.0 or a later 24.x, or 26 and up (what Angular 22 requires)
 - npm or yarn package manager
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/natalieMillman/markdown-to-pdf.git
    cd markdown-to-pdf
    ```
 
