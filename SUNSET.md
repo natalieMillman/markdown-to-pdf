@@ -1,6 +1,6 @@
 # Retiring markdown-to-pdf
 
-Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: in progress, with steps 1 and 2 done. The only change in AWS so far is three tags that step 2 added to the app's `main` branch.
+Plan for [issue #14](https://github.com/natalieMillman/markdown-to-pdf/issues/14). Status: in progress. Steps 1 to 3 were done on 2026-10-25, and step 4 was skipped. Step 5 is done apart from two things: deleting the hosted zone after the registration ends on 2027-08-11, and removing this repository from the AWS Amplify GitHub App, which is on hold. Step 6 is next.
 
 ## What's deployed
 
@@ -85,7 +85,7 @@ aws route53 list-resource-record-sets --hosted-zone-id Z06990637C1AJDTC3YDZ
 
 ### 1. Confirm the inventory and the cost
 
-Done on 2026-10-25: the results are above, and on issue #14. Still to do: check the last 90 days in Google Analytics, to decide on step 4.
+Done on 2026-10-25: the results are above, and on issue #14. The last 90 days in Google Analytics were checked the same day, and step 4 was skipped.
 
 The AWS numbers can't settle step 4, because they count crawlers and scanners along with people, but they do cap it. A first visit downloads 167 KB (the page, its script and its styles, compressed), so the 85 MB served in the 30 days to 2026-10-25 is at most about 510 first visits, and bots account for part of that. Traffic has been rising: the last three 30-day periods served 50 MB, 70 MB and 85 MB, over 32,943, 37,839 and 43,124 requests.
 
@@ -97,15 +97,28 @@ The stack is a record in code only, not imported into CloudFormation. An import 
 
 ### 3. Turn off the firewall (optional, any time after step 2)
 
+Done on 2026-10-25: the firewall is off and its web ACL is deleted, and both addresses still serve the site. Only loqui-client's web ACL is left in the account.
+
 This saves $23 a month without waiting for the rest. In the Amplify console, open the app, then Hosting → Firewall → Actions → Disassociate firewall, and then delete the web ACL. The command is in loqui-infra's teardown steps. The site keeps serving.
 
 In the 30 days to 2026-10-25 the firewall blocked 18,089 requests and allowed 13,291. Its rules block known bad IP addresses (6,583), requests with no user agent or with common exploit patterns (8,263), and other known exploit inputs (3,243). Without it, those requests are served like any other. A probe for a path the site doesn't have gets the app's `index.html`, 15 KB at most, so that's likely a few cents a month of data. Even if every blocked request fetched a whole first visit uncompressed (617 KB), it would be 11 GB, about $1.70.
 
 ### 4. Announce it (optional)
 
+Skipped.
+
 Only worth doing if Google Analytics shows real use. In that case, add a banner to the app for two to four weeks saying it's going away and pointing at this repository, which anyone can run locally with `npm start`. There's no user data to export or delete: nothing leaves the browser.
 
 ### 5. Take it down
+
+Done on 2026-10-25, apart from two things:
+
+- The app is deleted. Amplify removed the alias and `www` records with it, and `aws amplify list-apps` no longer lists it.
+- The domain is being let go. Auto-renew is off, and the certificate validation record is deleted, so the hosted zone holds only its NS and SOA records. **Still to do:** once the registration ends on 2027-08-11, delete the zone with `aws route53 delete-hosted-zone --id Z06990637C1AJDTC3YDZ`.
+- **On hold:** removing this repository from the AWS Amplify GitHub App.
+- The Google Analytics web data stream is deleted.
+
+The steps:
 
 - Follow the teardown steps in loqui-infra's README: check that CloudFormation holds none of it, turn off the firewall and delete its web ACL if step 3 hasn't, then delete the app with `aws amplify delete-app --app-id d1ielvxvstj604`, which takes its branch and domain association with it.
 - Check that it's gone: `aws amplify list-apps` no longer lists it, and neither `https://main.d1ielvxvstj604.amplifyapp.com` nor `https://www.convert-markdown-to-pdf.com` serves the app.
